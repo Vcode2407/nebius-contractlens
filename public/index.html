@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ContractLens turns API contracts into validated, repeatable regression checks with request-level evidence.">
+  <title>ContractLens — API promises, tested</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#workspace">Skip to test workspace</a>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="ContractLens home"><span class="brand-mark" aria-hidden="true">c<span>l</span></span><span>ContractLens</span><small>API REGRESSION LAB</small></a>
+    <div class="top-actions"><span class="local-status"><span aria-hidden="true"></span> Local fixture lab</span><button id="help-button" class="button subtle">How it works <span aria-hidden="true">↗</span></button></div>
+  </header>
+  <main>
+    <section class="hero" aria-labelledby="headline">
+      <div><p class="eyebrow">FROM CONTRACT TO EVIDENCE</p><h1 id="headline">Turn API promises into<br><span>repeatable checks.</span></h1><p class="hero-copy">A normal reservation can pass while retries quietly consume stock.<br>Find the edge cases, inspect the failure, and prove the repair.</p></div>
+      <div class="flow" aria-label="Workflow"><div><b>01</b><span>Review the plan</span><small>Validate every proposed case</small></div><div><b>02</b><span>Run the checks</span><small>Capture requests and state</small></div><div><b>03</b><span>Verify the repair</span><small>Rerun the same test plan</small></div></div>
+    </section>
+    <div id="notice" class="notice" role="status" aria-live="polite">Loading the local contract and curated cases…</div>
+    <div id="error" class="error-banner" role="alert" hidden></div>
+    <section class="workspace" id="workspace" aria-label="Contract test workspace">
+      <aside class="sidebar">
+        <section class="card contract-card" aria-labelledby="contract-title">
+          <div class="section-label"><span>THE CONTRACT</span><span class="version">v1.0</span></div>
+          <h2 id="contract-title">Stock Reservation API</h2><p class="muted">One limited item. Six promises to keep.</p>
+          <div class="endpoint"><span>POST</span><code>/v1/reservations</code></div>
+          <div class="stock-facts"><div><strong>5</strong><small>starting units</small></div><div><strong>29¢</strong><small>price per unit</small></div><div><strong>USD</strong><small>currency</small></div></div>
+          <div id="invariants" class="invariants"></div>
+          <button id="contract-json-button" class="text-button">View structured contract <span aria-hidden="true">↗</span></button>
+        </section>
+        <section class="card source-card" aria-labelledby="source-title">
+          <div class="section-label"><span>CASE PLAN SOURCE</span></div><h2 id="source-title">Choose how to propose tests</h2>
+          <label for="source">Generation mode</label><select id="source"><option value="curated">Curated local cases</option><option value="nebius" disabled>NVIDIA model via Nebius — setup needed</option></select>
+          <p id="source-explanation" class="small muted">Curated cases are authored examples. No model runs in this mode.</p>
+          <button id="generate-button" class="button primary full">Review case plan <span aria-hidden="true">→</span></button>
+          <button id="edit-plan-button" class="text-button">Inspect or edit plan JSON</button>
+          <div class="provider-note"><span class="tiny-dot" aria-hidden="true"></span><span id="provider-status">Checking provider configuration…</span></div>
+          <button id="setup-button" class="text-button">Nebius setup and qualification</button>
+        </section>
+      </aside>
+      <div class="main-column">
+        <section class="metrics" aria-label="Plan and run summary">
+          <div><small>ACCEPTED CASES</small><strong id="metric-accepted">—</strong><span>safe to execute</span></div><div><small>REJECTED PROPOSALS</small><strong id="metric-rejected">—</strong><span>never executed</span></div><div><small>FAILING CASES</small><strong id="metric-failed">—</strong><span id="failed-caption">buggy fixture not run</span></div><div><small>REPAIRED CASES</small><strong id="metric-resolved">—</strong><span id="resolved-caption">same plan, rerun</span></div>
+        </section>
+        <section class="card evaluation-card" aria-labelledby="evaluation-title">
+          <div class="card-heading"><div><p class="section-label">VALIDATED CASE PLAN</p><h2 id="evaluation-title">Reservation reliability baseline</h2><p id="plan-summary" class="muted small">Review cases before running them.</p></div><span id="source-badge" class="pill neutral">Loading</span></div>
+          <div class="run-toolbar"><div><span class="tiny-dot" aria-hidden="true"></span><span>Embedded fixtures only</span><small id="coverage-count">0 / 6 invariants covered</small></div><div class="run-actions"><button id="run-button" class="button dark" disabled>Run buggy fixture <span aria-hidden="true">↗</span></button><button id="repair-button" class="button secondary" disabled>Apply repairs &amp; rerun</button></div></div>
+          <div id="run-summary" class="run-summary"><span class="empty-icon" aria-hidden="true">⌁</span><div><strong>The plan is ready. The evidence comes next.</strong><p>Run the buggy fixture to see which contract promises fail.</p></div></div>
+          <div class="table-scroll"><table><caption class="sr-only">Case results before and after fixture repair</caption><thead><tr><th scope="col">Contract check</th><th scope="col">Buggy</th><th scope="col">Repaired</th><th scope="col"><span class="sr-only">View evidence</span></th></tr></thead><tbody id="case-rows"></tbody></table></div>
+          <div class="table-footer"><span id="assertion-count">Every case starts from a fresh stock and ledger.</span><button id="export-button" class="text-button" disabled>Export evidence JSON <span aria-hidden="true">↓</span></button></div>
+        </section>
+        <section class="card review-card" aria-labelledby="review-title"><div class="card-heading compact"><div><p class="section-label">VALIDATION BOUNDARY</p><h2 id="review-title">Proposals stay proposals until they pass.</h2></div><span id="rejected-badge" class="pill neutral">Checking</span></div><div id="rejected-list"></div><p class="small muted review-footnote">Expected outcomes come from the contract. The model cannot supply its own pass criteria, run code, or choose an outside service.</p></section>
+        <details class="card repair-notes"><summary>What changes in the repaired fixture? <span aria-hidden="true">+</span></summary><div id="repair-notes"></div><p class="small muted">This switches between two controlled API implementations. It does not modify a production service or claim that AI wrote the repair.</p></details>
+      </div>
+    </section>
+    <footer><span>ContractLens · deterministic execution, request-level evidence</span><span>Prototype for Nebius x NVIDIA · sponsor verification pending</span></footer>
+  </main>
+  <dialog id="evidence-dialog" class="wide-dialog" aria-labelledby="evidence-title"><div class="dialog-header"><div><p class="section-label">REQUEST-LEVEL EVIDENCE</p><h2 id="evidence-title">Case evidence</h2></div><button class="icon-button" data-close="evidence-dialog" aria-label="Close evidence">×</button></div><div id="evidence-content"></div></dialog>
+  <dialog id="json-dialog" class="wide-dialog" aria-labelledby="json-title"><div class="dialog-header"><div><p class="section-label">STRUCTURED INPUT</p><h2 id="json-title">Inspect plan JSON</h2></div><button class="icon-button" data-close="json-dialog" aria-label="Close JSON editor">×</button></div><p id="json-description" class="muted small"></p><label for="json-input" class="sr-only">JSON input</label><textarea id="json-input" spellcheck="false"></textarea><div class="dialog-actions"><span id="json-error" role="alert" class="small error-text"></span><button id="validate-button" class="button primary">Validate edited plan</button></div></dialog>
+  <dialog id="help-dialog" aria-labelledby="help-title"><div class="dialog-header"><h2 id="help-title">A small lab. A complete evidence loop.</h2><button class="icon-button" data-close="help-dialog" aria-label="Close help">×</button></div><ol class="help-list"><li><strong>Propose cases.</strong> Load curated cases, edit bounded JSON, or request a real NVIDIA model plan after configuring Nebius.</li><li><strong>Review the boundary.</strong> Only documented requests that exercise their named invariant are accepted.</li><li><strong>Execute the buggy fixture.</strong> Every case starts from a fresh ledger; inspect actual responses and state transitions.</li><li><strong>Apply fixture repairs and rerun.</strong> The same accepted cases test the fixed implementation, with a direct before/after comparison.</li></ol><p class="muted small">There is no arbitrary code execution and no production API target. Offline results are real fixture execution with curated cases, not model inference.</p></dialog>
+  <dialog id="setup-dialog" aria-labelledby="setup-title"><div class="dialog-header"><h2 id="setup-title">Connect Nebius when you are ready</h2><button class="icon-button" data-close="setup-dialog" aria-label="Close setup information">×</button></div><p id="setup-status" class="muted"></p><ol class="help-list"><li>Create a Token Factory account and API key. Its current onboarding requires billing setup and a bank card; promotional credits and country access need verification.</li><li>Copy <code>.env.example</code> to <code>.env</code>. Set backend-only <code>NEBIUS_API_KEY</code> and an explicit <code>NEBIUS_MODEL_ID</code> beginning <code>nvidia/</code>, then restart.</li><li>Select “NVIDIA model via Nebius” and request a plan. Generation makes one bounded inference call; the default curated mode makes none.</li></ol><p class="small">Example model: <code>nvidia/nemotron-3-super-120b-a12b</code>. Availability in your account is unverified.</p><p class="small muted">Submission gates: verify a real NVIDIA model response through Nebius, publish the licensed repository, provide working judge access and a public video under three minutes, complete feedback and submit by October 30, 2026, 10:30pm IST.</p><a class="text-button" href="https://docs.tokenfactory.nebius.com/quickstart" target="_blank" rel="noopener noreferrer">Official Token Factory quickstart ↗</a></dialog>
+</body>
+</html>
