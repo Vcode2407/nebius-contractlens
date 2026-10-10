@@ -1,0 +1,3351 @@
+{
+  "type": "Actual local curated browser development recording",
+  "recordedAt": "2026-10-10T18:10:08.301Z",
+  "sourceCommit": "9a72540efe5e92e638c10da61e0e824f493b3edb",
+  "liveNebiusVerified": false,
+  "liveNvidiaVerified": false,
+  "stages": [
+    {
+      "id": "intro",
+      "narrationStartMs": 1032,
+      "audioDurationSeconds": 14.996643990929705,
+      "text": "ContractLens turns API promises into repeatable checks. A normal reservation can pass while retries quietly consume stock. This is the working local fixture lab, with curated cases and no model call."
+    },
+    {
+      "id": "contract",
+      "narrationStartMs": 17227,
+      "audioDurationSeconds": 13.871836734693877,
+      "text": "The structured contract defines six promises, including safe retries and exact integer pricing. Every case starts with five units and a fresh ledger. Expected results come from this contract."
+    },
+    {
+      "id": "plan",
+      "narrationStartMs": 32328,
+      "audioDurationSeconds": 15.126848072562359,
+      "text": "Nine authored cases pass validation. The external target proposal is rejected and never executed. The source badge explicitly says curated. Real NVIDIA generation through Nebius still needs verification."
+    },
+    {
+      "id": "buggy",
+      "narrationStartMs": 48660,
+      "audioDurationSeconds": 14.616916099773242,
+      "text": "Run the buggy fixture. One normal reservation passes, but eight contract checks fail. These are actual handler results: sixty four assertions, with requests, responses and state evidence."
+    },
+    {
+      "id": "retry",
+      "narrationStartMs": 64594,
+      "audioDurationSeconds": 14.612154195011337,
+      "text": "Inspect the identical retry. Both requests use the same key. Stock falls from five to three, then from three to one. The replay created a second reservation instead of returning the first result."
+    },
+    {
+      "id": "repair",
+      "narrationStartMs": 80568,
+      "audioDurationSeconds": 13.987301587301587,
+      "text": "Apply repairs and rerun the same accepted plan. This selects the authored repaired implementation; a model does not write a repair. All nine cases pass, and eight previous failures are resolved."
+    },
+    {
+      "id": "fixed",
+      "narrationStartMs": 95770,
+      "audioDurationSeconds": 14.252063492063492,
+      "text": "The repaired replay returns the original response. Stock stays at three and the ledger contains one reservation. The evidence shows both implementations, so a passing status alone cannot hide the state change."
+    },
+    {
+      "id": "pricing",
+      "narrationStartMs": 111364,
+      "audioDurationSeconds": 14.236916099773243,
+      "text": "Integer pricing catches another small but real defect. Three items at twenty nine cents must cost eighty seven cents. The buggy fixture returned eighty six; the repaired fixture returns eighty seven."
+    },
+    {
+      "id": "export",
+      "narrationStartMs": 127070,
+      "audioDurationSeconds": 17.42639455782313,
+      "text": "Export downloads the actual contract, curated source, accepted plan, both runs and comparison. This prototype audits one controlled API. Live Nebius and NVIDIA evidence, free judge access and the final submission video remain pending."
+    }
+  ],
+  "responses": [
+    {
+      "elapsedMs": 456,
+      "path": "/api/bootstrap",
+      "status": 200,
+      "body": {
+        "contract": {
+          "id": "stock-reservation-v1",
+          "name": "Stock Reservation API",
+          "version": "1.0",
+          "description": "Reserve a limited stock item without overselling, double-counting retries, or losing a cent.",
+          "endpoint": {
+            "method": "POST",
+            "path": "/v1/reservations"
+          },
+          "item": {
+            "sku": "trail-sticker",
+            "name": "Trail sticker",
+            "initialStock": 5,
+            "unitPriceCents": 29,
+            "currency": "USD"
+          },
+          "request": {
+            "headers": {
+              "Idempotency-Key": "A non-empty unique key for this logical request"
+            },
+            "body": {
+              "sku": "trail-sticker",
+              "quantity": "A positive integer, at most the available stock"
+            }
+          },
+          "invariants": [
+            {
+              "id": "happy_path",
+              "name": "One reservation, one stock change",
+              "rule": "A valid request returns 201 and deducts exactly the requested quantity once."
+            },
+            {
+              "id": "quantity_guard",
+              "name": "Reject invalid quantities",
+              "rule": "Zero, negative, fractional, string, boolean and null quantities return 400 / INVALID_QUANTITY without changing stock or creating a reservation."
+            },
+            {
+              "id": "capacity_guard",
+              "name": "Never oversell",
+              "rule": "A quantity above available stock returns 409 / INSUFFICIENT_STOCK with no state change."
+            },
+            {
+              "id": "replay_safety",
+              "name": "Retries are safe",
+              "rule": "The same key and identical body return the original 201 response; the replay makes no extra reservation and no stock change."
+            },
+            {
+              "id": "key_conflict",
+              "name": "A key cannot change meaning",
+              "rule": "Reusing a key with a different body returns 409 / IDEMPOTENCY_CONFLICT and does not change stock."
+            },
+            {
+              "id": "integer_pricing",
+              "name": "Every cent is exact",
+              "rule": "A valid reservation has integer totalCents equal to quantity \u00c3\u2014 unitPriceCents, with currency USD."
+            }
+          ],
+          "scope": "Each case starts from five units and a fresh ledger. Requests execute only against embedded fixtures, never a supplied URL."
+        },
+        "repairs": [
+          {
+            "title": "Validate quantity before changing state",
+            "detail": "Require a positive integer. Reject invalid input with 400, preserving the ledger."
+          },
+          {
+            "title": "Check stock before reservation",
+            "detail": "Return 409 when the requested quantity exceeds available stock."
+          },
+          {
+            "title": "Remember the meaning of each key",
+            "detail": "Return the original response for identical retries and reject conflicting payloads."
+          },
+          {
+            "title": "Calculate prices in integer cents",
+            "detail": "Multiply unitPriceCents by quantity; avoid truncating floating-point dollar arithmetic."
+          }
+        ],
+        "provider": {
+          "defaultMode": "curated",
+          "configured": false,
+          "label": "Curated local mode",
+          "modelId": null,
+          "endpoint": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+          "verifiedCalls": 0,
+          "connectionVerifiedInThisProcess": false,
+          "attemptedCalls": 0,
+          "callLimit": 10,
+          "callsRemaining": 10,
+          "explanation": "No live model response with verified NVIDIA identity has been received in this server process.",
+          "qualification": "Hackathon qualification remains pending public repository, working judge access, demonstration video and a completed submission."
+        },
+        "constraints": {
+          "maxCases": 12,
+          "maxRequestsPerCase": 2,
+          "target": "Embedded fixture only"
+        }
+      }
+    },
+    {
+      "elapsedMs": 488,
+      "path": "/api/plan",
+      "status": 200,
+      "body": {
+        "plan": {
+          "planId": "c956f261-bcd2-4555-b846-78cdeb34e5cd",
+          "contractId": "stock-reservation-v1",
+          "name": "Reservation reliability baseline",
+          "summary": "Nine curated contract checks and one deliberately unsafe proposal. No model is called in this mode.",
+          "accepted": [
+            {
+              "id": "ordinary-reservation",
+              "title": "A normal reservation changes stock once",
+              "invariant": "happy_path",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 1
+                  }
+                }
+              ]
+            },
+            {
+              "id": "zero-quantity",
+              "title": "Zero should not silently become one",
+              "invariant": "quantity_guard",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 0
+                  }
+                }
+              ]
+            },
+            {
+              "id": "negative-quantity",
+              "title": "Negative quantities must not create stock",
+              "invariant": "quantity_guard",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": -1
+                  }
+                }
+              ]
+            },
+            {
+              "id": "fractional-quantity",
+              "title": "Half a unit is not a valid reservation",
+              "invariant": "quantity_guard",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 1.5
+                  }
+                }
+              ]
+            },
+            {
+              "id": "string-quantity",
+              "title": "A numeric string is still the wrong type",
+              "invariant": "quantity_guard",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": "2"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "over-capacity",
+              "title": "Six requests cannot consume five units",
+              "invariant": "capacity_guard",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 6
+                  }
+                }
+              ]
+            },
+            {
+              "id": "identical-retry",
+              "title": "A network retry must not reserve twice",
+              "invariant": "replay_safety",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "retry-001"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 2
+                  }
+                },
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "retry-001"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 2
+                  }
+                }
+              ]
+            },
+            {
+              "id": "changed-retry",
+              "title": "The same key cannot describe a new order",
+              "invariant": "key_conflict",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "collision-001"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 1
+                  }
+                },
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "collision-001"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 2
+                  }
+                }
+              ]
+            },
+            {
+              "id": "exact-cents",
+              "title": "Three 29\u00c2\u00a2 items must cost exactly 87\u00c2\u00a2",
+              "invariant": "integer_pricing",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 3
+                  }
+                }
+              ]
+            }
+          ],
+          "rejected": [
+            {
+              "id": "external-target",
+              "title": "Reject a proposal that targets an external API",
+              "reason": "Only POST /v1/reservations on the embedded fixture is allowed. External URLs and other endpoints are rejected."
+            }
+          ],
+          "coverage": [
+            {
+              "id": "happy_path",
+              "name": "One reservation, one stock change",
+              "rule": "A valid request returns 201 and deducts exactly the requested quantity once.",
+              "cases": 1
+            },
+            {
+              "id": "quantity_guard",
+              "name": "Reject invalid quantities",
+              "rule": "Zero, negative, fractional, string, boolean and null quantities return 400 / INVALID_QUANTITY without changing stock or creating a reservation.",
+              "cases": 4
+            },
+            {
+              "id": "capacity_guard",
+              "name": "Never oversell",
+              "rule": "A quantity above available stock returns 409 / INSUFFICIENT_STOCK with no state change.",
+              "cases": 1
+            },
+            {
+              "id": "replay_safety",
+              "name": "Retries are safe",
+              "rule": "The same key and identical body return the original 201 response; the replay makes no extra reservation and no stock change.",
+              "cases": 1
+            },
+            {
+              "id": "key_conflict",
+              "name": "A key cannot change meaning",
+              "rule": "Reusing a key with a different body returns 409 / IDEMPOTENCY_CONFLICT and does not change stock.",
+              "cases": 1
+            },
+            {
+              "id": "integer_pricing",
+              "name": "Every cent is exact",
+              "rule": "A valid reservation has integer totalCents equal to quantity \u00c3\u2014 unitPriceCents, with currency USD.",
+              "cases": 1
+            }
+          ],
+          "rawPlan": {
+            "name": "Reservation reliability baseline",
+            "summary": "Nine curated contract checks and one deliberately unsafe proposal. No model is called in this mode.",
+            "cases": [
+              {
+                "id": "ordinary-reservation",
+                "title": "A normal reservation changes stock once",
+                "invariant": "happy_path",
+                "requests": [
+                  {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "zero-quantity",
+                "title": "Zero should not silently become one",
+                "invariant": "quantity_guard",
+                "requests": [
+                  {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 0
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "negative-quantity",
+                "title": "Negative quantities must not create stock",
+                "invariant": "quantity_guard",
+                "requests": [
+                  {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": -1
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "fractional-quantity",
+                "title": "Half a unit is not a valid reservation",
+                "invariant": "quantity_guard",
+                "requests": [
+                  {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 1.5
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "string-quantity",
+                "title": "A numeric string is still the wrong type",
+                "invariant": "quantity_guard",
+                "requests": [
+                  {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": "2"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "over-capacity",
+                "title": "Six requests cannot consume five units",
+                "invariant": "capacity_guard",
+                "requests": [
+                  {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 6
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "identical-retry",
+                "title": "A network retry must not reserve twice",
+                "invariant": "replay_safety",
+                "requests": [
+                  {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "retry-001"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 2
+                    }
+                  },
+                  {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "retry-001"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 2
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "changed-retry",
+                "title": "The same key cannot describe a new order",
+                "invariant": "key_conflict",
+                "requests": [
+                  {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "collision-001"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 1
+                    }
+                  },
+                  {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "collision-001"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 2
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "exact-cents",
+                "title": "Three 29\u00c2\u00a2 items must cost exactly 87\u00c2\u00a2",
+                "invariant": "integer_pricing",
+                "requests": [
+                  {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 3
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "external-target",
+                "title": "Reject a proposal that targets an external API",
+                "invariant": "happy_path",
+                "requests": [
+                  {
+                    "method": "POST",
+                    "path": "https://example.com/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 1
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "source": {
+            "kind": "curated",
+            "label": "Curated local test cases; no model called",
+            "generatedAt": "2026-10-10T18:10:08.521Z"
+          },
+          "createdAt": 1791655808525
+        },
+        "provider": {
+          "defaultMode": "curated",
+          "configured": false,
+          "label": "Curated local mode",
+          "modelId": null,
+          "endpoint": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+          "verifiedCalls": 0,
+          "connectionVerifiedInThisProcess": false,
+          "attemptedCalls": 0,
+          "callLimit": 10,
+          "callsRemaining": 10,
+          "explanation": "No live model response with verified NVIDIA identity has been received in this server process.",
+          "qualification": "Hackathon qualification remains pending public repository, working judge access, demonstration video and a completed submission."
+        }
+      }
+    },
+    {
+      "elapsedMs": 48601,
+      "path": "/api/run",
+      "status": 200,
+      "body": {
+        "run": {
+          "runId": "aa3de6a7-5ed2-43d1-8408-5e502de28e4a",
+          "planId": "c956f261-bcd2-4555-b846-78cdeb34e5cd",
+          "source": {
+            "kind": "curated",
+            "label": "Curated local test cases; no model called",
+            "generatedAt": "2026-10-10T18:10:08.521Z"
+          },
+          "scenario": "buggy",
+          "executedAt": "2026-10-10T18:10:56.638Z",
+          "fixture": "embedded-stock-reservation",
+          "summary": {
+            "total": 9,
+            "passed": 1,
+            "failed": 8,
+            "assertions": 64,
+            "rejected": 1
+          },
+          "results": [
+            {
+              "id": "ordinary-reservation",
+              "title": "A normal reservation changes stock once",
+              "invariant": "happy_path",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 1
+                  }
+                }
+              ],
+              "passed": true,
+              "checks": [
+                {
+                  "id": "status",
+                  "label": "Accept a valid reservation",
+                  "expected": 201,
+                  "actual": 201,
+                  "passed": true
+                },
+                {
+                  "id": "stock",
+                  "label": "Deduct the requested quantity once",
+                  "expected": 4,
+                  "actual": 4,
+                  "passed": true
+                },
+                {
+                  "id": "ledger",
+                  "label": "Create one reservation",
+                  "expected": 1,
+                  "actual": 1,
+                  "passed": true
+                },
+                {
+                  "id": "stock-floor",
+                  "label": "Global invariant: stock never falls below zero",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "integer-stock",
+                  "label": "Global invariant: stock is a whole number",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "conservation",
+                  "label": "Global invariant: stock and ledger agree",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                }
+              ],
+              "evidence": [
+                {
+                  "step": 1,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 1
+                    }
+                  },
+                  "response": {
+                    "status": 201,
+                    "body": {
+                      "reservationId": "res-001",
+                      "sku": "trail-sticker",
+                      "quantity": 1,
+                      "totalCents": 28,
+                      "currency": "USD",
+                      "remainingStock": 4
+                    }
+                  },
+                  "before": {
+                    "stock": 5,
+                    "reservations": []
+                  },
+                  "after": {
+                    "stock": 4,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 1,
+                        "totalCents": 28,
+                        "currency": "USD",
+                        "remainingStock": 4,
+                        "key": "case-key"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "finalState": {
+                "stock": 4,
+                "reservations": [
+                  {
+                    "reservationId": "res-001",
+                    "sku": "trail-sticker",
+                    "quantity": 1,
+                    "totalCents": 28,
+                    "currency": "USD",
+                    "remainingStock": 4,
+                    "key": "case-key"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "zero-quantity",
+              "title": "Zero should not silently become one",
+              "invariant": "quantity_guard",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 0
+                  }
+                }
+              ],
+              "passed": false,
+              "checks": [
+                {
+                  "id": "status",
+                  "label": "Reject invalid quantity",
+                  "expected": 400,
+                  "actual": 201,
+                  "passed": false
+                },
+                {
+                  "id": "error-code",
+                  "label": "Return the documented error",
+                  "expected": "INVALID_QUANTITY",
+                  "actual": null,
+                  "passed": false
+                },
+                {
+                  "id": "stock",
+                  "label": "Leave stock unchanged",
+                  "expected": 5,
+                  "actual": 4,
+                  "passed": false
+                },
+                {
+                  "id": "ledger",
+                  "label": "Create no reservation",
+                  "expected": 0,
+                  "actual": 1,
+                  "passed": false
+                },
+                {
+                  "id": "stock-floor",
+                  "label": "Global invariant: stock never falls below zero",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "integer-stock",
+                  "label": "Global invariant: stock is a whole number",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "conservation",
+                  "label": "Global invariant: stock and ledger agree",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                }
+              ],
+              "evidence": [
+                {
+                  "step": 1,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 0
+                    }
+                  },
+                  "response": {
+                    "status": 201,
+                    "body": {
+                      "reservationId": "res-001",
+                      "sku": "trail-sticker",
+                      "quantity": 1,
+                      "totalCents": 28,
+                      "currency": "USD",
+                      "remainingStock": 4
+                    }
+                  },
+                  "before": {
+                    "stock": 5,
+                    "reservations": []
+                  },
+                  "after": {
+                    "stock": 4,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 1,
+                        "totalCents": 28,
+                        "currency": "USD",
+                        "remainingStock": 4,
+                        "key": "case-key"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "finalState": {
+                "stock": 4,
+                "reservations": [
+                  {
+                    "reservationId": "res-001",
+                    "sku": "trail-sticker",
+                    "quantity": 1,
+                    "totalCents": 28,
+                    "currency": "USD",
+                    "remainingStock": 4,
+                    "key": "case-key"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "negative-quantity",
+              "title": "Negative quantities must not create stock",
+              "invariant": "quantity_guard",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": -1
+                  }
+                }
+              ],
+              "passed": false,
+              "checks": [
+                {
+                  "id": "status",
+                  "label": "Reject invalid quantity",
+                  "expected": 400,
+                  "actual": 201,
+                  "passed": false
+                },
+                {
+                  "id": "error-code",
+                  "label": "Return the documented error",
+                  "expected": "INVALID_QUANTITY",
+                  "actual": null,
+                  "passed": false
+                },
+                {
+                  "id": "stock",
+                  "label": "Leave stock unchanged",
+                  "expected": 5,
+                  "actual": 6,
+                  "passed": false
+                },
+                {
+                  "id": "ledger",
+                  "label": "Create no reservation",
+                  "expected": 0,
+                  "actual": 1,
+                  "passed": false
+                },
+                {
+                  "id": "stock-floor",
+                  "label": "Global invariant: stock never falls below zero",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "integer-stock",
+                  "label": "Global invariant: stock is a whole number",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "conservation",
+                  "label": "Global invariant: stock and ledger agree",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                }
+              ],
+              "evidence": [
+                {
+                  "step": 1,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": -1
+                    }
+                  },
+                  "response": {
+                    "status": 201,
+                    "body": {
+                      "reservationId": "res-001",
+                      "sku": "trail-sticker",
+                      "quantity": -1,
+                      "totalCents": -29,
+                      "currency": "USD",
+                      "remainingStock": 6
+                    }
+                  },
+                  "before": {
+                    "stock": 5,
+                    "reservations": []
+                  },
+                  "after": {
+                    "stock": 6,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": -1,
+                        "totalCents": -29,
+                        "currency": "USD",
+                        "remainingStock": 6,
+                        "key": "case-key"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "finalState": {
+                "stock": 6,
+                "reservations": [
+                  {
+                    "reservationId": "res-001",
+                    "sku": "trail-sticker",
+                    "quantity": -1,
+                    "totalCents": -29,
+                    "currency": "USD",
+                    "remainingStock": 6,
+                    "key": "case-key"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "fractional-quantity",
+              "title": "Half a unit is not a valid reservation",
+              "invariant": "quantity_guard",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 1.5
+                  }
+                }
+              ],
+              "passed": false,
+              "checks": [
+                {
+                  "id": "status",
+                  "label": "Reject invalid quantity",
+                  "expected": 400,
+                  "actual": 201,
+                  "passed": false
+                },
+                {
+                  "id": "error-code",
+                  "label": "Return the documented error",
+                  "expected": "INVALID_QUANTITY",
+                  "actual": null,
+                  "passed": false
+                },
+                {
+                  "id": "stock",
+                  "label": "Leave stock unchanged",
+                  "expected": 5,
+                  "actual": 3.5,
+                  "passed": false
+                },
+                {
+                  "id": "ledger",
+                  "label": "Create no reservation",
+                  "expected": 0,
+                  "actual": 1,
+                  "passed": false
+                },
+                {
+                  "id": "stock-floor",
+                  "label": "Global invariant: stock never falls below zero",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "integer-stock",
+                  "label": "Global invariant: stock is a whole number",
+                  "expected": true,
+                  "actual": false,
+                  "passed": false
+                },
+                {
+                  "id": "conservation",
+                  "label": "Global invariant: stock and ledger agree",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                }
+              ],
+              "evidence": [
+                {
+                  "step": 1,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 1.5
+                    }
+                  },
+                  "response": {
+                    "status": 201,
+                    "body": {
+                      "reservationId": "res-001",
+                      "sku": "trail-sticker",
+                      "quantity": 1.5,
+                      "totalCents": 43,
+                      "currency": "USD",
+                      "remainingStock": 3.5
+                    }
+                  },
+                  "before": {
+                    "stock": 5,
+                    "reservations": []
+                  },
+                  "after": {
+                    "stock": 3.5,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 1.5,
+                        "totalCents": 43,
+                        "currency": "USD",
+                        "remainingStock": 3.5,
+                        "key": "case-key"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "finalState": {
+                "stock": 3.5,
+                "reservations": [
+                  {
+                    "reservationId": "res-001",
+                    "sku": "trail-sticker",
+                    "quantity": 1.5,
+                    "totalCents": 43,
+                    "currency": "USD",
+                    "remainingStock": 3.5,
+                    "key": "case-key"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "string-quantity",
+              "title": "A numeric string is still the wrong type",
+              "invariant": "quantity_guard",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": "2"
+                  }
+                }
+              ],
+              "passed": false,
+              "checks": [
+                {
+                  "id": "status",
+                  "label": "Reject invalid quantity",
+                  "expected": 400,
+                  "actual": 201,
+                  "passed": false
+                },
+                {
+                  "id": "error-code",
+                  "label": "Return the documented error",
+                  "expected": "INVALID_QUANTITY",
+                  "actual": null,
+                  "passed": false
+                },
+                {
+                  "id": "stock",
+                  "label": "Leave stock unchanged",
+                  "expected": 5,
+                  "actual": 3,
+                  "passed": false
+                },
+                {
+                  "id": "ledger",
+                  "label": "Create no reservation",
+                  "expected": 0,
+                  "actual": 1,
+                  "passed": false
+                },
+                {
+                  "id": "stock-floor",
+                  "label": "Global invariant: stock never falls below zero",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "integer-stock",
+                  "label": "Global invariant: stock is a whole number",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "conservation",
+                  "label": "Global invariant: stock and ledger agree",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                }
+              ],
+              "evidence": [
+                {
+                  "step": 1,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": "2"
+                    }
+                  },
+                  "response": {
+                    "status": 201,
+                    "body": {
+                      "reservationId": "res-001",
+                      "sku": "trail-sticker",
+                      "quantity": "2",
+                      "totalCents": 57,
+                      "currency": "USD",
+                      "remainingStock": 3
+                    }
+                  },
+                  "before": {
+                    "stock": 5,
+                    "reservations": []
+                  },
+                  "after": {
+                    "stock": 3,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": "2",
+                        "totalCents": 57,
+                        "currency": "USD",
+                        "remainingStock": 3,
+                        "key": "case-key"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "finalState": {
+                "stock": 3,
+                "reservations": [
+                  {
+                    "reservationId": "res-001",
+                    "sku": "trail-sticker",
+                    "quantity": "2",
+                    "totalCents": 57,
+                    "currency": "USD",
+                    "remainingStock": 3,
+                    "key": "case-key"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "over-capacity",
+              "title": "Six requests cannot consume five units",
+              "invariant": "capacity_guard",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 6
+                  }
+                }
+              ],
+              "passed": false,
+              "checks": [
+                {
+                  "id": "status",
+                  "label": "Reject overselling",
+                  "expected": 409,
+                  "actual": 201,
+                  "passed": false
+                },
+                {
+                  "id": "error-code",
+                  "label": "Return the documented error",
+                  "expected": "INSUFFICIENT_STOCK",
+                  "actual": null,
+                  "passed": false
+                },
+                {
+                  "id": "stock",
+                  "label": "Leave stock unchanged",
+                  "expected": 5,
+                  "actual": -1,
+                  "passed": false
+                },
+                {
+                  "id": "ledger",
+                  "label": "Create no reservation",
+                  "expected": 0,
+                  "actual": 1,
+                  "passed": false
+                },
+                {
+                  "id": "stock-floor",
+                  "label": "Global invariant: stock never falls below zero",
+                  "expected": true,
+                  "actual": false,
+                  "passed": false
+                },
+                {
+                  "id": "integer-stock",
+                  "label": "Global invariant: stock is a whole number",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "conservation",
+                  "label": "Global invariant: stock and ledger agree",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                }
+              ],
+              "evidence": [
+                {
+                  "step": 1,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 6
+                    }
+                  },
+                  "response": {
+                    "status": 201,
+                    "body": {
+                      "reservationId": "res-001",
+                      "sku": "trail-sticker",
+                      "quantity": 6,
+                      "totalCents": 173,
+                      "currency": "USD",
+                      "remainingStock": -1
+                    }
+                  },
+                  "before": {
+                    "stock": 5,
+                    "reservations": []
+                  },
+                  "after": {
+                    "stock": -1,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 6,
+                        "totalCents": 173,
+                        "currency": "USD",
+                        "remainingStock": -1,
+                        "key": "case-key"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "finalState": {
+                "stock": -1,
+                "reservations": [
+                  {
+                    "reservationId": "res-001",
+                    "sku": "trail-sticker",
+                    "quantity": 6,
+                    "totalCents": 173,
+                    "currency": "USD",
+                    "remainingStock": -1,
+                    "key": "case-key"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "identical-retry",
+              "title": "A network retry must not reserve twice",
+              "invariant": "replay_safety",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "retry-001"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 2
+                  }
+                },
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "retry-001"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 2
+                  }
+                }
+              ],
+              "passed": false,
+              "checks": [
+                {
+                  "id": "first-status",
+                  "label": "Accept the initial reservation",
+                  "expected": 201,
+                  "actual": 201,
+                  "passed": true
+                },
+                {
+                  "id": "replay-status",
+                  "label": "Return a successful replay",
+                  "expected": 201,
+                  "actual": 201,
+                  "passed": true
+                },
+                {
+                  "id": "same-response",
+                  "label": "Replay the original response exactly",
+                  "expected": {
+                    "reservationId": "res-001",
+                    "sku": "trail-sticker",
+                    "quantity": 2,
+                    "totalCents": 57,
+                    "currency": "USD",
+                    "remainingStock": 3
+                  },
+                  "actual": {
+                    "reservationId": "res-002",
+                    "sku": "trail-sticker",
+                    "quantity": 2,
+                    "totalCents": 57,
+                    "currency": "USD",
+                    "remainingStock": 1
+                  },
+                  "passed": false
+                },
+                {
+                  "id": "stock",
+                  "label": "A replay must not consume more stock",
+                  "expected": 3,
+                  "actual": 1,
+                  "passed": false
+                },
+                {
+                  "id": "ledger",
+                  "label": "Keep a single reservation",
+                  "expected": 1,
+                  "actual": 2,
+                  "passed": false
+                },
+                {
+                  "id": "stock-floor",
+                  "label": "Global invariant: stock never falls below zero",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "integer-stock",
+                  "label": "Global invariant: stock is a whole number",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "conservation",
+                  "label": "Global invariant: stock and ledger agree",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                }
+              ],
+              "evidence": [
+                {
+                  "step": 1,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "retry-001"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 2
+                    }
+                  },
+                  "response": {
+                    "status": 201,
+                    "body": {
+                      "reservationId": "res-001",
+                      "sku": "trail-sticker",
+                      "quantity": 2,
+                      "totalCents": 57,
+                      "currency": "USD",
+                      "remainingStock": 3
+                    }
+                  },
+                  "before": {
+                    "stock": 5,
+                    "reservations": []
+                  },
+                  "after": {
+                    "stock": 3,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 2,
+                        "totalCents": 57,
+                        "currency": "USD",
+                        "remainingStock": 3,
+                        "key": "retry-001"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "step": 2,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "retry-001"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 2
+                    }
+                  },
+                  "response": {
+                    "status": 201,
+                    "body": {
+                      "reservationId": "res-002",
+                      "sku": "trail-sticker",
+                      "quantity": 2,
+                      "totalCents": 57,
+                      "currency": "USD",
+                      "remainingStock": 1
+                    }
+                  },
+                  "before": {
+                    "stock": 3,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 2,
+                        "totalCents": 57,
+                        "currency": "USD",
+                        "remainingStock": 3,
+                        "key": "retry-001"
+                      }
+                    ]
+                  },
+                  "after": {
+                    "stock": 1,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 2,
+                        "totalCents": 57,
+                        "currency": "USD",
+                        "remainingStock": 3,
+                        "key": "retry-001"
+                      },
+                      {
+                        "reservationId": "res-002",
+                        "sku": "trail-sticker",
+                        "quantity": 2,
+                        "totalCents": 57,
+                        "currency": "USD",
+                        "remainingStock": 1,
+                        "key": "retry-001"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "finalState": {
+                "stock": 1,
+                "reservations": [
+                  {
+                    "reservationId": "res-001",
+                    "sku": "trail-sticker",
+                    "quantity": 2,
+                    "totalCents": 57,
+                    "currency": "USD",
+                    "remainingStock": 3,
+                    "key": "retry-001"
+                  },
+                  {
+                    "reservationId": "res-002",
+                    "sku": "trail-sticker",
+                    "quantity": 2,
+                    "totalCents": 57,
+                    "currency": "USD",
+                    "remainingStock": 1,
+                    "key": "retry-001"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "changed-retry",
+              "title": "The same key cannot describe a new order",
+              "invariant": "key_conflict",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "collision-001"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 1
+                  }
+                },
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "collision-001"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 2
+                  }
+                }
+              ],
+              "passed": false,
+              "checks": [
+                {
+                  "id": "first-status",
+                  "label": "Accept the first request",
+                  "expected": 201,
+                  "actual": 201,
+                  "passed": true
+                },
+                {
+                  "id": "conflict-status",
+                  "label": "Reject a changed payload",
+                  "expected": 409,
+                  "actual": 201,
+                  "passed": false
+                },
+                {
+                  "id": "error-code",
+                  "label": "Return the documented conflict",
+                  "expected": "IDEMPOTENCY_CONFLICT",
+                  "actual": null,
+                  "passed": false
+                },
+                {
+                  "id": "stock",
+                  "label": "A conflict must not consume stock",
+                  "expected": 4,
+                  "actual": 2,
+                  "passed": false
+                },
+                {
+                  "id": "ledger",
+                  "label": "Keep the original reservation only",
+                  "expected": 1,
+                  "actual": 2,
+                  "passed": false
+                },
+                {
+                  "id": "stock-floor",
+                  "label": "Global invariant: stock never falls below zero",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "integer-stock",
+                  "label": "Global invariant: stock is a whole number",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "conservation",
+                  "label": "Global invariant: stock and ledger agree",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                }
+              ],
+              "evidence": [
+                {
+                  "step": 1,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "collision-001"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 1
+                    }
+                  },
+                  "response": {
+                    "status": 201,
+                    "body": {
+                      "reservationId": "res-001",
+                      "sku": "trail-sticker",
+                      "quantity": 1,
+                      "totalCents": 28,
+                      "currency": "USD",
+                      "remainingStock": 4
+                    }
+                  },
+                  "before": {
+                    "stock": 5,
+                    "reservations": []
+                  },
+                  "after": {
+                    "stock": 4,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 1,
+                        "totalCents": 28,
+                        "currency": "USD",
+                        "remainingStock": 4,
+                        "key": "collision-001"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "step": 2,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "collision-001"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 2
+                    }
+                  },
+                  "response": {
+                    "status": 201,
+                    "body": {
+                      "reservationId": "res-002",
+                      "sku": "trail-sticker",
+                      "quantity": 2,
+                      "totalCents": 57,
+                      "currency": "USD",
+                      "remainingStock": 2
+                    }
+                  },
+                  "before": {
+                    "stock": 4,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 1,
+                        "totalCents": 28,
+                        "currency": "USD",
+                        "remainingStock": 4,
+                        "key": "collision-001"
+                      }
+                    ]
+                  },
+                  "after": {
+                    "stock": 2,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 1,
+                        "totalCents": 28,
+                        "currency": "USD",
+                        "remainingStock": 4,
+                        "key": "collision-001"
+                      },
+                      {
+                        "reservationId": "res-002",
+                        "sku": "trail-sticker",
+                        "quantity": 2,
+                        "totalCents": 57,
+                        "currency": "USD",
+                        "remainingStock": 2,
+                        "key": "collision-001"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "finalState": {
+                "stock": 2,
+                "reservations": [
+                  {
+                    "reservationId": "res-001",
+                    "sku": "trail-sticker",
+                    "quantity": 1,
+                    "totalCents": 28,
+                    "currency": "USD",
+                    "remainingStock": 4,
+                    "key": "collision-001"
+                  },
+                  {
+                    "reservationId": "res-002",
+                    "sku": "trail-sticker",
+                    "quantity": 2,
+                    "totalCents": 57,
+                    "currency": "USD",
+                    "remainingStock": 2,
+                    "key": "collision-001"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "exact-cents",
+              "title": "Three 29\u00c2\u00a2 items must cost exactly 87\u00c2\u00a2",
+              "invariant": "integer_pricing",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 3
+                  }
+                }
+              ],
+              "passed": false,
+              "checks": [
+                {
+                  "id": "status",
+                  "label": "Accept a valid reservation",
+                  "expected": 201,
+                  "actual": 201,
+                  "passed": true
+                },
+                {
+                  "id": "total-cents",
+                  "label": "Multiply the integer unit price",
+                  "expected": 87,
+                  "actual": 86,
+                  "passed": false
+                },
+                {
+                  "id": "integer-cents",
+                  "label": "Represent money as integer cents",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "currency",
+                  "label": "Return the documented currency",
+                  "expected": "USD",
+                  "actual": "USD",
+                  "passed": true
+                },
+                {
+                  "id": "stock-floor",
+                  "label": "Global invariant: stock never falls below zero",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "integer-stock",
+                  "label": "Global invariant: stock is a whole number",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "conservation",
+                  "label": "Global invariant: stock and ledger agree",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                }
+              ],
+              "evidence": [
+                {
+                  "step": 1,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 3
+                    }
+                  },
+                  "response": {
+                    "status": 201,
+                    "body": {
+                      "reservationId": "res-001",
+                      "sku": "trail-sticker",
+                      "quantity": 3,
+                      "totalCents": 86,
+                      "currency": "USD",
+                      "remainingStock": 2
+                    }
+                  },
+                  "before": {
+                    "stock": 5,
+                    "reservations": []
+                  },
+                  "after": {
+                    "stock": 2,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 3,
+                        "totalCents": 86,
+                        "currency": "USD",
+                        "remainingStock": 2,
+                        "key": "case-key"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "finalState": {
+                "stock": 2,
+                "reservations": [
+                  {
+                    "reservationId": "res-001",
+                    "sku": "trail-sticker",
+                    "quantity": 3,
+                    "totalCents": 86,
+                    "currency": "USD",
+                    "remainingStock": 2,
+                    "key": "case-key"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "comparison": null
+      }
+    },
+    {
+      "elapsedMs": 80406,
+      "path": "/api/run",
+      "status": 200,
+      "body": {
+        "run": {
+          "runId": "c72a92ea-ca75-4143-a335-4a0e11e56de5",
+          "planId": "c956f261-bcd2-4555-b846-78cdeb34e5cd",
+          "source": {
+            "kind": "curated",
+            "label": "Curated local test cases; no model called",
+            "generatedAt": "2026-10-10T18:10:08.521Z"
+          },
+          "scenario": "fixed",
+          "executedAt": "2026-10-10T18:11:28.439Z",
+          "fixture": "embedded-stock-reservation",
+          "summary": {
+            "total": 9,
+            "passed": 9,
+            "failed": 0,
+            "assertions": 64,
+            "rejected": 1
+          },
+          "results": [
+            {
+              "id": "ordinary-reservation",
+              "title": "A normal reservation changes stock once",
+              "invariant": "happy_path",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 1
+                  }
+                }
+              ],
+              "passed": true,
+              "checks": [
+                {
+                  "id": "status",
+                  "label": "Accept a valid reservation",
+                  "expected": 201,
+                  "actual": 201,
+                  "passed": true
+                },
+                {
+                  "id": "stock",
+                  "label": "Deduct the requested quantity once",
+                  "expected": 4,
+                  "actual": 4,
+                  "passed": true
+                },
+                {
+                  "id": "ledger",
+                  "label": "Create one reservation",
+                  "expected": 1,
+                  "actual": 1,
+                  "passed": true
+                },
+                {
+                  "id": "stock-floor",
+                  "label": "Global invariant: stock never falls below zero",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "integer-stock",
+                  "label": "Global invariant: stock is a whole number",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "conservation",
+                  "label": "Global invariant: stock and ledger agree",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                }
+              ],
+              "evidence": [
+                {
+                  "step": 1,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 1
+                    }
+                  },
+                  "response": {
+                    "status": 201,
+                    "body": {
+                      "reservationId": "res-001",
+                      "sku": "trail-sticker",
+                      "quantity": 1,
+                      "totalCents": 29,
+                      "currency": "USD",
+                      "remainingStock": 4
+                    }
+                  },
+                  "before": {
+                    "stock": 5,
+                    "reservations": []
+                  },
+                  "after": {
+                    "stock": 4,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 1,
+                        "totalCents": 29,
+                        "currency": "USD",
+                        "remainingStock": 4,
+                        "key": "case-key"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "finalState": {
+                "stock": 4,
+                "reservations": [
+                  {
+                    "reservationId": "res-001",
+                    "sku": "trail-sticker",
+                    "quantity": 1,
+                    "totalCents": 29,
+                    "currency": "USD",
+                    "remainingStock": 4,
+                    "key": "case-key"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "zero-quantity",
+              "title": "Zero should not silently become one",
+              "invariant": "quantity_guard",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 0
+                  }
+                }
+              ],
+              "passed": true,
+              "checks": [
+                {
+                  "id": "status",
+                  "label": "Reject invalid quantity",
+                  "expected": 400,
+                  "actual": 400,
+                  "passed": true
+                },
+                {
+                  "id": "error-code",
+                  "label": "Return the documented error",
+                  "expected": "INVALID_QUANTITY",
+                  "actual": "INVALID_QUANTITY",
+                  "passed": true
+                },
+                {
+                  "id": "stock",
+                  "label": "Leave stock unchanged",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                },
+                {
+                  "id": "ledger",
+                  "label": "Create no reservation",
+                  "expected": 0,
+                  "actual": 0,
+                  "passed": true
+                },
+                {
+                  "id": "stock-floor",
+                  "label": "Global invariant: stock never falls below zero",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "integer-stock",
+                  "label": "Global invariant: stock is a whole number",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "conservation",
+                  "label": "Global invariant: stock and ledger agree",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                }
+              ],
+              "evidence": [
+                {
+                  "step": 1,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 0
+                    }
+                  },
+                  "response": {
+                    "status": 400,
+                    "body": {
+                      "code": "INVALID_QUANTITY"
+                    }
+                  },
+                  "before": {
+                    "stock": 5,
+                    "reservations": []
+                  },
+                  "after": {
+                    "stock": 5,
+                    "reservations": []
+                  }
+                }
+              ],
+              "finalState": {
+                "stock": 5,
+                "reservations": []
+              }
+            },
+            {
+              "id": "negative-quantity",
+              "title": "Negative quantities must not create stock",
+              "invariant": "quantity_guard",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": -1
+                  }
+                }
+              ],
+              "passed": true,
+              "checks": [
+                {
+                  "id": "status",
+                  "label": "Reject invalid quantity",
+                  "expected": 400,
+                  "actual": 400,
+                  "passed": true
+                },
+                {
+                  "id": "error-code",
+                  "label": "Return the documented error",
+                  "expected": "INVALID_QUANTITY",
+                  "actual": "INVALID_QUANTITY",
+                  "passed": true
+                },
+                {
+                  "id": "stock",
+                  "label": "Leave stock unchanged",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                },
+                {
+                  "id": "ledger",
+                  "label": "Create no reservation",
+                  "expected": 0,
+                  "actual": 0,
+                  "passed": true
+                },
+                {
+                  "id": "stock-floor",
+                  "label": "Global invariant: stock never falls below zero",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "integer-stock",
+                  "label": "Global invariant: stock is a whole number",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "conservation",
+                  "label": "Global invariant: stock and ledger agree",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                }
+              ],
+              "evidence": [
+                {
+                  "step": 1,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": -1
+                    }
+                  },
+                  "response": {
+                    "status": 400,
+                    "body": {
+                      "code": "INVALID_QUANTITY"
+                    }
+                  },
+                  "before": {
+                    "stock": 5,
+                    "reservations": []
+                  },
+                  "after": {
+                    "stock": 5,
+                    "reservations": []
+                  }
+                }
+              ],
+              "finalState": {
+                "stock": 5,
+                "reservations": []
+              }
+            },
+            {
+              "id": "fractional-quantity",
+              "title": "Half a unit is not a valid reservation",
+              "invariant": "quantity_guard",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 1.5
+                  }
+                }
+              ],
+              "passed": true,
+              "checks": [
+                {
+                  "id": "status",
+                  "label": "Reject invalid quantity",
+                  "expected": 400,
+                  "actual": 400,
+                  "passed": true
+                },
+                {
+                  "id": "error-code",
+                  "label": "Return the documented error",
+                  "expected": "INVALID_QUANTITY",
+                  "actual": "INVALID_QUANTITY",
+                  "passed": true
+                },
+                {
+                  "id": "stock",
+                  "label": "Leave stock unchanged",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                },
+                {
+                  "id": "ledger",
+                  "label": "Create no reservation",
+                  "expected": 0,
+                  "actual": 0,
+                  "passed": true
+                },
+                {
+                  "id": "stock-floor",
+                  "label": "Global invariant: stock never falls below zero",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "integer-stock",
+                  "label": "Global invariant: stock is a whole number",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "conservation",
+                  "label": "Global invariant: stock and ledger agree",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                }
+              ],
+              "evidence": [
+                {
+                  "step": 1,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 1.5
+                    }
+                  },
+                  "response": {
+                    "status": 400,
+                    "body": {
+                      "code": "INVALID_QUANTITY"
+                    }
+                  },
+                  "before": {
+                    "stock": 5,
+                    "reservations": []
+                  },
+                  "after": {
+                    "stock": 5,
+                    "reservations": []
+                  }
+                }
+              ],
+              "finalState": {
+                "stock": 5,
+                "reservations": []
+              }
+            },
+            {
+              "id": "string-quantity",
+              "title": "A numeric string is still the wrong type",
+              "invariant": "quantity_guard",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": "2"
+                  }
+                }
+              ],
+              "passed": true,
+              "checks": [
+                {
+                  "id": "status",
+                  "label": "Reject invalid quantity",
+                  "expected": 400,
+                  "actual": 400,
+                  "passed": true
+                },
+                {
+                  "id": "error-code",
+                  "label": "Return the documented error",
+                  "expected": "INVALID_QUANTITY",
+                  "actual": "INVALID_QUANTITY",
+                  "passed": true
+                },
+                {
+                  "id": "stock",
+                  "label": "Leave stock unchanged",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                },
+                {
+                  "id": "ledger",
+                  "label": "Create no reservation",
+                  "expected": 0,
+                  "actual": 0,
+                  "passed": true
+                },
+                {
+                  "id": "stock-floor",
+                  "label": "Global invariant: stock never falls below zero",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "integer-stock",
+                  "label": "Global invariant: stock is a whole number",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "conservation",
+                  "label": "Global invariant: stock and ledger agree",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                }
+              ],
+              "evidence": [
+                {
+                  "step": 1,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": "2"
+                    }
+                  },
+                  "response": {
+                    "status": 400,
+                    "body": {
+                      "code": "INVALID_QUANTITY"
+                    }
+                  },
+                  "before": {
+                    "stock": 5,
+                    "reservations": []
+                  },
+                  "after": {
+                    "stock": 5,
+                    "reservations": []
+                  }
+                }
+              ],
+              "finalState": {
+                "stock": 5,
+                "reservations": []
+              }
+            },
+            {
+              "id": "over-capacity",
+              "title": "Six requests cannot consume five units",
+              "invariant": "capacity_guard",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 6
+                  }
+                }
+              ],
+              "passed": true,
+              "checks": [
+                {
+                  "id": "status",
+                  "label": "Reject overselling",
+                  "expected": 409,
+                  "actual": 409,
+                  "passed": true
+                },
+                {
+                  "id": "error-code",
+                  "label": "Return the documented error",
+                  "expected": "INSUFFICIENT_STOCK",
+                  "actual": "INSUFFICIENT_STOCK",
+                  "passed": true
+                },
+                {
+                  "id": "stock",
+                  "label": "Leave stock unchanged",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                },
+                {
+                  "id": "ledger",
+                  "label": "Create no reservation",
+                  "expected": 0,
+                  "actual": 0,
+                  "passed": true
+                },
+                {
+                  "id": "stock-floor",
+                  "label": "Global invariant: stock never falls below zero",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "integer-stock",
+                  "label": "Global invariant: stock is a whole number",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "conservation",
+                  "label": "Global invariant: stock and ledger agree",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                }
+              ],
+              "evidence": [
+                {
+                  "step": 1,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 6
+                    }
+                  },
+                  "response": {
+                    "status": 409,
+                    "body": {
+                      "code": "INSUFFICIENT_STOCK"
+                    }
+                  },
+                  "before": {
+                    "stock": 5,
+                    "reservations": []
+                  },
+                  "after": {
+                    "stock": 5,
+                    "reservations": []
+                  }
+                }
+              ],
+              "finalState": {
+                "stock": 5,
+                "reservations": []
+              }
+            },
+            {
+              "id": "identical-retry",
+              "title": "A network retry must not reserve twice",
+              "invariant": "replay_safety",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "retry-001"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 2
+                  }
+                },
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "retry-001"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 2
+                  }
+                }
+              ],
+              "passed": true,
+              "checks": [
+                {
+                  "id": "first-status",
+                  "label": "Accept the initial reservation",
+                  "expected": 201,
+                  "actual": 201,
+                  "passed": true
+                },
+                {
+                  "id": "replay-status",
+                  "label": "Return a successful replay",
+                  "expected": 201,
+                  "actual": 201,
+                  "passed": true
+                },
+                {
+                  "id": "same-response",
+                  "label": "Replay the original response exactly",
+                  "expected": {
+                    "reservationId": "res-001",
+                    "sku": "trail-sticker",
+                    "quantity": 2,
+                    "totalCents": 58,
+                    "currency": "USD",
+                    "remainingStock": 3
+                  },
+                  "actual": {
+                    "reservationId": "res-001",
+                    "sku": "trail-sticker",
+                    "quantity": 2,
+                    "totalCents": 58,
+                    "currency": "USD",
+                    "remainingStock": 3
+                  },
+                  "passed": true
+                },
+                {
+                  "id": "stock",
+                  "label": "A replay must not consume more stock",
+                  "expected": 3,
+                  "actual": 3,
+                  "passed": true
+                },
+                {
+                  "id": "ledger",
+                  "label": "Keep a single reservation",
+                  "expected": 1,
+                  "actual": 1,
+                  "passed": true
+                },
+                {
+                  "id": "stock-floor",
+                  "label": "Global invariant: stock never falls below zero",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "integer-stock",
+                  "label": "Global invariant: stock is a whole number",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "conservation",
+                  "label": "Global invariant: stock and ledger agree",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                }
+              ],
+              "evidence": [
+                {
+                  "step": 1,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "retry-001"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 2
+                    }
+                  },
+                  "response": {
+                    "status": 201,
+                    "body": {
+                      "reservationId": "res-001",
+                      "sku": "trail-sticker",
+                      "quantity": 2,
+                      "totalCents": 58,
+                      "currency": "USD",
+                      "remainingStock": 3
+                    }
+                  },
+                  "before": {
+                    "stock": 5,
+                    "reservations": []
+                  },
+                  "after": {
+                    "stock": 3,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 2,
+                        "totalCents": 58,
+                        "currency": "USD",
+                        "remainingStock": 3,
+                        "key": "retry-001"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "step": 2,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "retry-001"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 2
+                    }
+                  },
+                  "response": {
+                    "status": 201,
+                    "body": {
+                      "reservationId": "res-001",
+                      "sku": "trail-sticker",
+                      "quantity": 2,
+                      "totalCents": 58,
+                      "currency": "USD",
+                      "remainingStock": 3
+                    }
+                  },
+                  "before": {
+                    "stock": 3,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 2,
+                        "totalCents": 58,
+                        "currency": "USD",
+                        "remainingStock": 3,
+                        "key": "retry-001"
+                      }
+                    ]
+                  },
+                  "after": {
+                    "stock": 3,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 2,
+                        "totalCents": 58,
+                        "currency": "USD",
+                        "remainingStock": 3,
+                        "key": "retry-001"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "finalState": {
+                "stock": 3,
+                "reservations": [
+                  {
+                    "reservationId": "res-001",
+                    "sku": "trail-sticker",
+                    "quantity": 2,
+                    "totalCents": 58,
+                    "currency": "USD",
+                    "remainingStock": 3,
+                    "key": "retry-001"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "changed-retry",
+              "title": "The same key cannot describe a new order",
+              "invariant": "key_conflict",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "collision-001"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 1
+                  }
+                },
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "collision-001"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 2
+                  }
+                }
+              ],
+              "passed": true,
+              "checks": [
+                {
+                  "id": "first-status",
+                  "label": "Accept the first request",
+                  "expected": 201,
+                  "actual": 201,
+                  "passed": true
+                },
+                {
+                  "id": "conflict-status",
+                  "label": "Reject a changed payload",
+                  "expected": 409,
+                  "actual": 409,
+                  "passed": true
+                },
+                {
+                  "id": "error-code",
+                  "label": "Return the documented conflict",
+                  "expected": "IDEMPOTENCY_CONFLICT",
+                  "actual": "IDEMPOTENCY_CONFLICT",
+                  "passed": true
+                },
+                {
+                  "id": "stock",
+                  "label": "A conflict must not consume stock",
+                  "expected": 4,
+                  "actual": 4,
+                  "passed": true
+                },
+                {
+                  "id": "ledger",
+                  "label": "Keep the original reservation only",
+                  "expected": 1,
+                  "actual": 1,
+                  "passed": true
+                },
+                {
+                  "id": "stock-floor",
+                  "label": "Global invariant: stock never falls below zero",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "integer-stock",
+                  "label": "Global invariant: stock is a whole number",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "conservation",
+                  "label": "Global invariant: stock and ledger agree",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                }
+              ],
+              "evidence": [
+                {
+                  "step": 1,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "collision-001"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 1
+                    }
+                  },
+                  "response": {
+                    "status": 201,
+                    "body": {
+                      "reservationId": "res-001",
+                      "sku": "trail-sticker",
+                      "quantity": 1,
+                      "totalCents": 29,
+                      "currency": "USD",
+                      "remainingStock": 4
+                    }
+                  },
+                  "before": {
+                    "stock": 5,
+                    "reservations": []
+                  },
+                  "after": {
+                    "stock": 4,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 1,
+                        "totalCents": 29,
+                        "currency": "USD",
+                        "remainingStock": 4,
+                        "key": "collision-001"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "step": 2,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "collision-001"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 2
+                    }
+                  },
+                  "response": {
+                    "status": 409,
+                    "body": {
+                      "code": "IDEMPOTENCY_CONFLICT"
+                    }
+                  },
+                  "before": {
+                    "stock": 4,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 1,
+                        "totalCents": 29,
+                        "currency": "USD",
+                        "remainingStock": 4,
+                        "key": "collision-001"
+                      }
+                    ]
+                  },
+                  "after": {
+                    "stock": 4,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 1,
+                        "totalCents": 29,
+                        "currency": "USD",
+                        "remainingStock": 4,
+                        "key": "collision-001"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "finalState": {
+                "stock": 4,
+                "reservations": [
+                  {
+                    "reservationId": "res-001",
+                    "sku": "trail-sticker",
+                    "quantity": 1,
+                    "totalCents": 29,
+                    "currency": "USD",
+                    "remainingStock": 4,
+                    "key": "collision-001"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "exact-cents",
+              "title": "Three 29\u00c2\u00a2 items must cost exactly 87\u00c2\u00a2",
+              "invariant": "integer_pricing",
+              "requests": [
+                {
+                  "method": "POST",
+                  "path": "/v1/reservations",
+                  "headers": {
+                    "Idempotency-Key": "case-key"
+                  },
+                  "body": {
+                    "sku": "trail-sticker",
+                    "quantity": 3
+                  }
+                }
+              ],
+              "passed": true,
+              "checks": [
+                {
+                  "id": "status",
+                  "label": "Accept a valid reservation",
+                  "expected": 201,
+                  "actual": 201,
+                  "passed": true
+                },
+                {
+                  "id": "total-cents",
+                  "label": "Multiply the integer unit price",
+                  "expected": 87,
+                  "actual": 87,
+                  "passed": true
+                },
+                {
+                  "id": "integer-cents",
+                  "label": "Represent money as integer cents",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "currency",
+                  "label": "Return the documented currency",
+                  "expected": "USD",
+                  "actual": "USD",
+                  "passed": true
+                },
+                {
+                  "id": "stock-floor",
+                  "label": "Global invariant: stock never falls below zero",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "integer-stock",
+                  "label": "Global invariant: stock is a whole number",
+                  "expected": true,
+                  "actual": true,
+                  "passed": true
+                },
+                {
+                  "id": "conservation",
+                  "label": "Global invariant: stock and ledger agree",
+                  "expected": 5,
+                  "actual": 5,
+                  "passed": true
+                }
+              ],
+              "evidence": [
+                {
+                  "step": 1,
+                  "request": {
+                    "method": "POST",
+                    "path": "/v1/reservations",
+                    "headers": {
+                      "Idempotency-Key": "case-key"
+                    },
+                    "body": {
+                      "sku": "trail-sticker",
+                      "quantity": 3
+                    }
+                  },
+                  "response": {
+                    "status": 201,
+                    "body": {
+                      "reservationId": "res-001",
+                      "sku": "trail-sticker",
+                      "quantity": 3,
+                      "totalCents": 87,
+                      "currency": "USD",
+                      "remainingStock": 2
+                    }
+                  },
+                  "before": {
+                    "stock": 5,
+                    "reservations": []
+                  },
+                  "after": {
+                    "stock": 2,
+                    "reservations": [
+                      {
+                        "reservationId": "res-001",
+                        "sku": "trail-sticker",
+                        "quantity": 3,
+                        "totalCents": 87,
+                        "currency": "USD",
+                        "remainingStock": 2,
+                        "key": "case-key"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "finalState": {
+                "stock": 2,
+                "reservations": [
+                  {
+                    "reservationId": "res-001",
+                    "sku": "trail-sticker",
+                    "quantity": 3,
+                    "totalCents": 87,
+                    "currency": "USD",
+                    "remainingStock": 2,
+                    "key": "case-key"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "comparison": [
+          {
+            "id": "ordinary-reservation",
+            "title": "A normal reservation changes stock once",
+            "before": true,
+            "after": true,
+            "resolved": false
+          },
+          {
+            "id": "zero-quantity",
+            "title": "Zero should not silently become one",
+            "before": false,
+            "after": true,
+            "resolved": true
+          },
+          {
+            "id": "negative-quantity",
+            "title": "Negative quantities must not create stock",
+            "before": false,
+            "after": true,
+            "resolved": true
+          },
+          {
+            "id": "fractional-quantity",
+            "title": "Half a unit is not a valid reservation",
+            "before": false,
+            "after": true,
+            "resolved": true
+          },
+          {
+            "id": "string-quantity",
+            "title": "A numeric string is still the wrong type",
+            "before": false,
+            "after": true,
+            "resolved": true
+          },
+          {
+            "id": "over-capacity",
+            "title": "Six requests cannot consume five units",
+            "before": false,
+            "after": true,
+            "resolved": true
+          },
+          {
+            "id": "identical-retry",
+            "title": "A network retry must not reserve twice",
+            "before": false,
+            "after": true,
+            "resolved": true
+          },
+          {
+            "id": "changed-retry",
+            "title": "The same key cannot describe a new order",
+            "before": false,
+            "after": true,
+            "resolved": true
+          },
+          {
+            "id": "exact-cents",
+            "title": "Three 29\u00c2\u00a2 items must cost exactly 87\u00c2\u00a2",
+            "before": false,
+            "after": true,
+            "resolved": true
+          }
+        ]
+      }
+    }
+  ],
+  "consoleErrors": [],
+  "requests": [
+    {
+      "elapsedMs": 344,
+      "method": "GET",
+      "path": "/api/bootstrap",
+      "body": null
+    },
+    {
+      "elapsedMs": 467,
+      "method": "POST",
+      "path": "/api/plan",
+      "body": {
+        "contractId": "stock-reservation-v1",
+        "mode": "curated"
+      }
+    },
+    {
+      "elapsedMs": 48590,
+      "method": "POST",
+      "path": "/api/run",
+      "body": {
+        "planId": "c956f261-bcd2-4555-b846-78cdeb34e5cd",
+        "scenario": "buggy"
+      }
+    },
+    {
+      "elapsedMs": 80397,
+      "method": "POST",
+      "path": "/api/run",
+      "body": {
+        "planId": "c956f261-bcd2-4555-b846-78cdeb34e5cd",
+        "scenario": "fixed",
+        "compareTo": "aa3de6a7-5ed2-43d1-8408-5e502de28e4a"
+      }
+    }
+  ],
+  "exportedFile": "contractlens-exported-evidence.json",
+  "verifiedResults": {
+    "buggy": "1/9",
+    "fixed": "9/9",
+    "resolved": 8,
+    "assertionsPerRun": 64,
+    "stockReplayBefore": [
+      5,
+      3,
+      1
+    ],
+    "stockReplayAfter": [
+      5,
+      3,
+      3
+    ],
+    "priceBeforeCents": 86,
+    "priceAfterCents": 87,
+    "exportMatchesObservedResponses": true
+  },
+  "elapsedMs": 153580,
+  "videoSha256": "9cc095415622f5b3898e0f55a7efef38a0df424cdf296dc3340df2385bb4cc3e",
+  "editingDisclosure": "Actual local browser screen recording, with Windows English narration timed to recorded actions and a permanent curated-source status banner. No model, production service, or platform execution is simulated.",
+  "video": "contractlens-local-development.mp4",
+  "scope": "One controlled reservation API, authored curated cases and supplied fixture repairs; no model calls.",
+  "metadataCorrection": "The captured original provider qualification message predates the public-source status correction. It is retained unchanged as actual observed output; the MIT source repository is public. Real Nebius/NVIDIA inference, public judge access, final YouTube video, provider feedback, entrant eligibility and final submission remain pending."
+}

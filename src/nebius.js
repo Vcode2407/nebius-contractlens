@@ -22,7 +22,7 @@ export function providerStatus(config, verifiedCalls = 0, attemptedCalls = 0) {
     verifiedCalls, connectionVerifiedInThisProcess: verifiedCalls > 0,
     attemptedCalls, callLimit: config.maxCalls || 10, callsRemaining: Math.max(0, (config.maxCalls || 10) - attemptedCalls),
     explanation: verifiedCalls > 0 ? 'A response identifying the exact requested NVIDIA model returned a validated plan in this server process.' : 'No live model response with verified NVIDIA identity has been received in this server process.',
-    qualification: 'Hackathon qualification remains pending public repository, working judge access, demonstration video and a completed submission.',
+    qualification: 'The MIT source repository is public. Qualification remains pending actual NVIDIA inference through Nebius, free public judge access, a public YouTube video under three minutes, firsthand provider feedback, entrant eligibility and a completed submission.',
   };
 }
 

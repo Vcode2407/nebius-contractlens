@@ -4,16 +4,19 @@ ContractLens turns a structured API contract into validated regression cases, ru
 
 Public MIT source: [Vcode2407/nebius-contractlens](https://github.com/Vcode2407/nebius-contractlens). [Automated regression checks](https://github.com/Vcode2407/nebius-contractlens/actions) run on Windows and Ubuntu.
 
+[Watch the actual narrated local walkthrough](docs/LOCAL_DEMO.md) (2:34), with captured request-level screenshots and matching JSON export. It explicitly discloses curated cases and pending live sponsor inference.
+
 This is a working local prototype for the **Nebius x NVIDIA Global AI Hackathon**, intended for the Coding and Agentic Engineering track. It currently audits one embedded Stock Reservation API. It does not scan arbitrary services or execute generated code.
 
-**Qualification is pending.** The default demonstration uses clearly labelled curated cases and performs real deterministic fixture execution. The MIT repository is public. A real NVIDIA model response through Nebius, working judge access, public demo video, firsthand provider feedback and submitted entry still need completion. Configuring an API key alone does not verify inference.
+**Qualification is pending.** The default demonstration uses clearly labelled curated cases and performs real deterministic fixture execution. The MIT repository is public. A real NVIDIA model response through Nebius, free public judge access, public YouTube demo video, firsthand provider feedback, entrant eligibility and submitted entry still need completion. Configuring an API key alone does not verify inference.
 
-## Run on Windows
+## Run locally
 
 Install Node.js **22 or newer**. No GPU, Docker, database, additional npm dependency, or sponsor account is needed for the curated local mode.
 
 ```powershell
-cd "D:\Documents\My work\Hackathons\nebius-contractlens"
+git clone https://github.com/Vcode2407/nebius-contractlens.git
+cd nebius-contractlens
 npm ci
 npm start
 ```
@@ -27,6 +30,8 @@ Open **http://127.0.0.1:4183**. The server binds only to the local loopback addr
 5. Export the evidence JSON, including source provenance and before/after results.
 
 The structured contract and case-plan JSON can be inspected in the UI. Edited plans are validated before execution and replace the current reviewed plan. Every individual case starts from five units, a 29-cent unit price and a fresh ledger.
+
+Follow [the clean-checkout judge guide](docs/JUDGE_SETUP.md) for expected retry/pricing evidence, exports and qualification limits.
 
 ## Optional real NVIDIA inference
 

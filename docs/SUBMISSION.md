@@ -74,7 +74,7 @@ A useful generated test must express a meaningful contract invariant and produce
 
 Validate participant access to Nebius and an available NVIDIA open-source model, then request a real plan through Token Factory. Preserve the exact requested/returned model IDs and usage provenance, review accepted/rejected cases and coverage, and run that actual generated plan against both fixtures. Report its observed counts separately from the curated baseline.
 
-Finish the public MIT-licensed repository and a working judge-access path, record the verified model-to-evidence flow, and write provider feedback based on actual use. Future product work could support additional structured contracts, durable evidence bundles, and carefully scoped adapters for other test environments.
+The MIT repository is public. Complete a working public judge-access path, record the verified model-to-evidence flow, and write provider feedback based on actual use. Future product work could support additional structured contracts, durable evidence bundles, and carefully scoped adapters for other test environments.
 
 ## Demo outline — 2 minutes 50 seconds
 
@@ -101,9 +101,10 @@ If the generated plan omits a curated case or exposes different failures, follow
 | Track | Coding and Agentic Engineering — intended selection, not submitted. |
 | Built with | Node.js, JavaScript, HTML, CSS. Nebius Token Factory/NVIDIA runtime use remains pending verification. |
 | Public repository | https://github.com/Vcode2407/nebius-contractlens — public, MIT licensed; Windows/Ubuntu regression CI configured. |
-| Working demo / test build | **Pending URL and validated judge-access instructions.** Current local address: `http://127.0.0.1:4183`. |
+| Working demo / test build | [Clean-checkout local judge instructions](JUDGE_SETUP.md) prepared. Required public access URL remains pending; the current loopback address is `http://127.0.0.1:4183`. |
 | Public YouTube video | **Pending URL.** Target: 2:50 with the verified model and actual application modules. |
-| Screenshots | **Pending.** Capture validated plan provenance, an actual failed assertion, repaired evidence, and comparison. |
+| Actual local development video | [Narrated 2:34 MP4 and matching execution/export evidence](LOCAL_DEMO.md) available. Curated cases; no model call. |
+| Screenshots | [Actual curated retry before/after and repaired summary](LOCAL_DEMO.md) captured. Model-provenance screenshots remain pending actual inference. |
 | Live model evidence | **Pending.** Record actual requested/returned model IDs, source, usage, accepted/rejected cases, coverage, and both fixture results. |
 | Tool feedback | **Pending actual provider use.** Describe observations from Nebius and NVIDIA tools/models used; no firsthand provider performance or access claim is made yet. |
 | Entrant / team / eligibility | **Pending human completion.** Confirm required details and declarations. |
