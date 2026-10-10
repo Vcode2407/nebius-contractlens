@@ -2,9 +2,11 @@
 
 ContractLens turns a structured API contract into validated regression cases, runs them against controlled sample API implementations, and explains failures with actual requests, responses and stock/ledger transitions. Rerunning the same plan against the repaired fixture proves which failures were resolved.
 
+Public MIT source: [Vcode2407/nebius-contractlens](https://github.com/Vcode2407/nebius-contractlens). [Automated regression checks](https://github.com/Vcode2407/nebius-contractlens/actions) run on Windows and Ubuntu.
+
 This is a working local prototype for the **Nebius x NVIDIA Global AI Hackathon**, intended for the Coding and Agentic Engineering track. It currently audits one embedded Stock Reservation API. It does not scan arbitrary services or execute generated code.
 
-**Qualification is pending.** The default demonstration uses clearly labelled curated cases and performs real deterministic fixture execution. A real NVIDIA model response through Nebius, public repository, working judge access, public demo video, feedback and submitted entry still need completion. Configuring an API key alone does not verify inference.
+**Qualification is pending.** The default demonstration uses clearly labelled curated cases and performs real deterministic fixture execution. The MIT repository is public. A real NVIDIA model response through Nebius, working judge access, public demo video, firsthand provider feedback and submitted entry still need completion. Configuring an API key alone does not verify inference.
 
 ## Run on Windows
 

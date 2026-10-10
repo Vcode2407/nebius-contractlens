@@ -1,6 +1,6 @@
 # ContractLens — Devpost submission draft
 
-**Status:** Working local regression harness with controlled API fixtures. Real Nebius inference, sponsor access, public links, and submission remain pending. No live NVIDIA model result is claimed.
+**Status:** Working local regression harness with controlled API fixtures and [public MIT source](https://github.com/Vcode2407/nebius-contractlens). Real Nebius inference, sponsor access, public video, and submission remain pending. No live NVIDIA model result is claimed.
 
 ## Project name, tagline, and track
 
@@ -100,7 +100,7 @@ If the generated plan omits a curated case or exposes different failures, follow
 | Tagline | Turn API contracts into validated regression cases and reproducible failure evidence. |
 | Track | Coding and Agentic Engineering — intended selection, not submitted. |
 | Built with | Node.js, JavaScript, HTML, CSS. Nebius Token Factory/NVIDIA runtime use remains pending verification. |
-| Public repository | **Pending URL.** MIT license and local source are present; publication remains pending. |
+| Public repository | https://github.com/Vcode2407/nebius-contractlens — public, MIT licensed; Windows/Ubuntu regression CI configured. |
 | Working demo / test build | **Pending URL and validated judge-access instructions.** Current local address: `http://127.0.0.1:4183`. |
 | Public YouTube video | **Pending URL.** Target: 2:50 with the verified model and actual application modules. |
 | Screenshots | **Pending.** Capture validated plan provenance, an actual failed assertion, repaired evidence, and comparison. |
