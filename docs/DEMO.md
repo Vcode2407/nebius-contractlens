@@ -1,8 +1,8 @@
 # ContractLens demonstration script
 
-An [actual narrated curated walkthrough and matching execution evidence](LOCAL_DEMO.md) are available (2:34). The recording is clearly labelled local development, with no model call. The outline below remains the final qualifying demonstration plan.
+An [actual silent curated walkthrough and matching execution evidence](LOCAL_DEMO.md) are available (2:25). Its English UI and status banner are unchanged; the audio track has been removed. The recording is clearly labelled local development, with no model call. The outline below remains the final qualifying demonstration plan.
 
-The curated recording is useful for rehearsing the interaction; it does not prove qualifying model use. Before recording the submission, configure Nebius, select the real NVIDIA source and capture its actual plan and results. Generated counts may differ from the curated baseline, so narrate the visible results.
+The curated recording is useful for rehearsing the interaction; it does not prove qualifying model use. Before recording the submission, configure Nebius, select the real NVIDIA source and capture its actual plan and results. Generated counts may differ from the curated baseline, so describe the visible results accurately in on-screen captions.
 
 ## Under-three-minute flow
 

@@ -78,9 +78,9 @@ The MIT repository is public. Complete a working public judge-access path, recor
 
 ## Demo outline — 2 minutes 50 seconds
 
-The existing [demo script](DEMO.md) supplies the rehearsal flow. Curated mode can demonstrate the local harness today. The submission recording still needs an actual validated NVIDIA response through Nebius; narrate the generated run's visible counts and coverage.
+The existing [demo script](DEMO.md) supplies the rehearsal flow. Curated mode can demonstrate the local harness today. The submission recording still needs an actual validated NVIDIA response through Nebius; describe the generated run's visible counts and coverage in on-screen captions.
 
-| Time | Footage and narration |
+| Time | Footage and on-screen captions |
 | --- | --- |
 | 0:00–0:20 | Show the reservation contract. Explain how a normal reservation can pass while retries or pricing violate the agreement. |
 | 0:20–0:45 | Generate a real plan with the verified NVIDIA model through Nebius. Display its provider/model provenance and explain that the contract supplies expectations. |
@@ -103,7 +103,7 @@ If the generated plan omits a curated case or exposes different failures, follow
 | Public repository | https://github.com/Vcode2407/nebius-contractlens — public, MIT licensed; Windows/Ubuntu regression CI configured. |
 | Working demo / test build | [Clean-checkout local judge instructions](JUDGE_SETUP.md) prepared. Required public access URL remains pending; the current loopback address is `http://127.0.0.1:4183`. |
 | Public YouTube video | **Pending URL.** Target: 2:50 with the verified model and actual application modules. |
-| Actual local development video | [Narrated 2:34 MP4 and matching execution/export evidence](LOCAL_DEMO.md) available. Curated cases; no model call. |
+| Actual local development video | [Silent 2:25 MP4 and matching execution/export evidence](LOCAL_DEMO.md) available. Curated cases; no model call. |
 | Screenshots | [Actual curated retry before/after and repaired summary](LOCAL_DEMO.md) captured. Model-provenance screenshots remain pending actual inference. |
 | Live model evidence | **Pending.** Record actual requested/returned model IDs, source, usage, accepted/rejected cases, coverage, and both fixture results. |
 | Tool feedback | **Pending actual provider use.** Describe observations from Nebius and NVIDIA tools/models used; no firsthand provider performance or access claim is made yet. |

@@ -4,7 +4,7 @@ ContractLens turns a structured API contract into validated regression cases, ru
 
 Public MIT source: [Vcode2407/nebius-contractlens](https://github.com/Vcode2407/nebius-contractlens). [Automated regression checks](https://github.com/Vcode2407/nebius-contractlens/actions) run on Windows and Ubuntu.
 
-[Watch the actual narrated local walkthrough](docs/LOCAL_DEMO.md) (2:34), with captured request-level screenshots and matching JSON export. It explicitly discloses curated cases and pending live sponsor inference.
+[Watch the actual silent local walkthrough](docs/LOCAL_DEMO.md) (2:25), with captured request-level screenshots and matching JSON export. It explicitly discloses curated cases and pending live sponsor inference.
 
 This is a working local prototype for the **Nebius x NVIDIA Global AI Hackathon**, intended for the Coding and Agentic Engineering track. It currently audits one embedded Stock Reservation API. It does not scan arbitrary services or execute generated code.
 

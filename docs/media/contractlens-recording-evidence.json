@@ -7,57 +7,48 @@
   "stages": [
     {
       "id": "intro",
-      "narrationStartMs": 1032,
-      "audioDurationSeconds": 14.996643990929705,
-      "text": "ContractLens turns API promises into repeatable checks. A normal reservation can pass while retries quietly consume stock. This is the working local fixture lab, with curated cases and no model call."
+      "text": "ContractLens turns API promises into repeatable checks. A normal reservation can pass while retries quietly consume stock. This is the working local fixture lab, with curated cases and no model call.",
+      "walkthroughStartMs": 1032
     },
     {
       "id": "contract",
-      "narrationStartMs": 17227,
-      "audioDurationSeconds": 13.871836734693877,
-      "text": "The structured contract defines six promises, including safe retries and exact integer pricing. Every case starts with five units and a fresh ledger. Expected results come from this contract."
+      "text": "The structured contract defines six promises, including safe retries and exact integer pricing. Every case starts with five units and a fresh ledger. Expected results come from this contract.",
+      "walkthroughStartMs": 17227
     },
     {
       "id": "plan",
-      "narrationStartMs": 32328,
-      "audioDurationSeconds": 15.126848072562359,
-      "text": "Nine authored cases pass validation. The external target proposal is rejected and never executed. The source badge explicitly says curated. Real NVIDIA generation through Nebius still needs verification."
+      "text": "Nine authored cases pass validation. The external target proposal is rejected and never executed. The source badge explicitly says curated. Real NVIDIA generation through Nebius still needs verification.",
+      "walkthroughStartMs": 32328
     },
     {
       "id": "buggy",
-      "narrationStartMs": 48660,
-      "audioDurationSeconds": 14.616916099773242,
-      "text": "Run the buggy fixture. One normal reservation passes, but eight contract checks fail. These are actual handler results: sixty four assertions, with requests, responses and state evidence."
+      "text": "Run the buggy fixture. One normal reservation passes, but eight contract checks fail. These are actual handler results: sixty four assertions, with requests, responses and state evidence.",
+      "walkthroughStartMs": 48660
     },
     {
       "id": "retry",
-      "narrationStartMs": 64594,
-      "audioDurationSeconds": 14.612154195011337,
-      "text": "Inspect the identical retry. Both requests use the same key. Stock falls from five to three, then from three to one. The replay created a second reservation instead of returning the first result."
+      "text": "Inspect the identical retry. Both requests use the same key. Stock falls from five to three, then from three to one. The replay created a second reservation instead of returning the first result.",
+      "walkthroughStartMs": 64594
     },
     {
       "id": "repair",
-      "narrationStartMs": 80568,
-      "audioDurationSeconds": 13.987301587301587,
-      "text": "Apply repairs and rerun the same accepted plan. This selects the authored repaired implementation; a model does not write a repair. All nine cases pass, and eight previous failures are resolved."
+      "text": "Apply repairs and rerun the same accepted plan. This selects the authored repaired implementation; a model does not write a repair. All nine cases pass, and eight previous failures are resolved.",
+      "walkthroughStartMs": 80568
     },
     {
       "id": "fixed",
-      "narrationStartMs": 95770,
-      "audioDurationSeconds": 14.252063492063492,
-      "text": "The repaired replay returns the original response. Stock stays at three and the ledger contains one reservation. The evidence shows both implementations, so a passing status alone cannot hide the state change."
+      "text": "The repaired replay returns the original response. Stock stays at three and the ledger contains one reservation. The evidence shows both implementations, so a passing status alone cannot hide the state change.",
+      "walkthroughStartMs": 95770
     },
     {
       "id": "pricing",
-      "narrationStartMs": 111364,
-      "audioDurationSeconds": 14.236916099773243,
-      "text": "Integer pricing catches another small but real defect. Three items at twenty nine cents must cost eighty seven cents. The buggy fixture returned eighty six; the repaired fixture returns eighty seven."
+      "text": "Integer pricing catches another small but real defect. Three items at twenty nine cents must cost eighty seven cents. The buggy fixture returned eighty six; the repaired fixture returns eighty seven.",
+      "walkthroughStartMs": 111364
     },
     {
       "id": "export",
-      "narrationStartMs": 127070,
-      "audioDurationSeconds": 17.42639455782313,
-      "text": "Export downloads the actual contract, curated source, accepted plan, both runs and comparison. This prototype audits one controlled API. Live Nebius and NVIDIA evidence, free judge access and the final submission video remain pending."
+      "text": "Export downloads the actual contract, curated source, accepted plan, both runs and comparison. This prototype audits one controlled API. Live Nebius and NVIDIA evidence, free judge access and the final submission video remain pending.",
+      "walkthroughStartMs": 127070
     }
   ],
   "responses": [
@@ -3343,9 +3334,13 @@
     "exportMatchesObservedResponses": true
   },
   "elapsedMs": 153580,
-  "videoSha256": "9cc095415622f5b3898e0f55a7efef38a0df424cdf296dc3340df2385bb4cc3e",
-  "editingDisclosure": "Actual local browser screen recording, with Windows English narration timed to recorded actions and a permanent curated-source status banner. No model, production service, or platform execution is simulated.",
+  "videoSha256": "be097d11a4af6e25238bf501577fd3457a1049560e7e2ee19c050587573e40a2",
+  "editingDisclosure": "Silent screen recording of actual local actions, with unchanged English application text and permanent development-status banner. All audio has been removed without changing the encoded video stream. No platform or model execution is simulated.",
   "video": "contractlens-local-development.mp4",
   "scope": "One controlled reservation API, authored curated cases and supplied fixture repairs; no model calls.",
-  "metadataCorrection": "The captured original provider qualification message predates the public-source status correction. It is retained unchanged as actual observed output; the MIT source repository is public. Real Nebius/NVIDIA inference, public judge access, final YouTube video, provider feedback, entrant eligibility and final submission remain pending."
+  "metadataCorrection": "The captured original provider qualification message predates the public-source status correction. It is retained unchanged as actual observed output; the MIT source repository is public. Real Nebius/NVIDIA inference, public judge access, final YouTube video, provider feedback, entrant eligibility and final submission remain pending.",
+  "durationSeconds": 145.458333,
+  "audioStreamCount": 0,
+  "mediaVerification": "silent-video-verification.json",
+  "stageTextScope": "Timed written walkthrough of the observed recording; the current video has no audio track."
 }

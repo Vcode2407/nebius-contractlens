@@ -1,0 +1,24 @@
+{
+  "video": "contractlens-local-development.mp4",
+  "verifiedAt": "2026-10-11T07:50:59.231325+00:00",
+  "operation": "Removed all audio tracks and optional container metadata; copied the complete encoded video stream without re-encoding.",
+  "durationSeconds": 145.458333,
+  "bytes": 3646474,
+  "sha256": "be097d11a4af6e25238bf501577fd3457a1049560e7e2ee19c050587573e40a2",
+  "audioStreamCount": 0,
+  "streamTypes": [
+    "video"
+  ],
+  "videoCodec": "h264",
+  "videoWidth": 1280,
+  "videoHeight": 972,
+  "videoPacketCount": 3491,
+  "videoPayloadSha256": "699332ddb8bf338b27d56a8027c8909f5b872df28bf1722960f4c4075ab63070",
+  "codecConfigurationSha256": "08dbced102968e209b3c86777e3b041d5bf1dbbbeeb53583915903ca05623f82",
+  "originalFileSha256": "9cc095415622f5b3898e0f55a7efef38a0df424cdf296dc3340df2385bb4cc3e",
+  "originalVideoDurationSeconds": 145.45833333333334,
+  "encodedVideoUnchanged": true,
+  "removedAudioOnlyTailSeconds": 8.121667,
+  "fullVideoDecodePassed": true,
+  "disclosure": "Actual application footage, captions and provider-status labels are unchanged. This edit does not change software authoring, integration provenance, or submission readiness."
+}
