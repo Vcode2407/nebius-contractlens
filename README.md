@@ -61,6 +61,22 @@ The provider response must identify the **exact requested model ID** and report 
 
 [Current Token Factory billing documentation](https://docs.tokenfactory.nebius.com/other-capabilities/billing-new) requires billing onboarding and a bank card. The [hackathon resources](https://nebiusglobalaihackathon.devpost.com/resources) describe promotional credits, but actual account provisioning, credits, country support and model access must be verified by the participant. This project has made no live provider calls during implementation or automated testing.
 
+### Capture one actual model plan and its fixture evidence
+
+After the account owner configures an available NVIDIA model and deliberately starts the local server, explicitly authorize one inference request:
+
+```powershell
+npm run evidence:nebius -- --confirm-nebius-use
+```
+
+The command accepts only `http://127.0.0.1:<port>` (`--port=4183` by default), checks the fixed fictional contract and configured call allowance, and sends exactly one `mode: nebius` generation request. It never reads `.env` or credential files, configures an account, retries inference, or falls back to curated cases. Set the backend's `NEBIUS_MAX_CALLS=1` before starting if you want this process to allow only one attempt. A failed dispatched request can still consume that allowance and incur provider usage; restarting resets it.
+
+On success it runs the same accepted plan against the buggy and fixed **embedded fixtures**, checks the request/state evidence and comparison against deterministic local reproduction, and requires the attempt/verified counters to increase by exactly one. It preserves exact requested/returned NVIDIA identities and accepted server provenance. The server's existing acceptance gate requires `finish_reason: stop`; the command does **not** capture or claim to independently inspect the raw completion envelope.
+
+The whitelisted result is saved as ignored `artifacts/live-evidence/nebius-live-evidence-<planId>.json`, without credentials, unknown provider fields or raw rejected request payloads. Earlier captures are preserved. Model-plan counts and invariant coverage are reported from that captured plan; they are never replaced with curated baseline counts. A capture establishes this controlled runtime/evidence loop, not production API reliability, public judge access or a completed submission. Review the file before sharing. [Detailed judge procedure](docs/JUDGE_SETUP.md#capture-one-actual-nvidia-plan).
+
+This command has been verified with isolated loopback servers and injected provider responses only. No account, live model request or sponsor billing operation was performed during development.
+
 ## Verification
 
 ```powershell
@@ -68,7 +84,7 @@ npm test
 npm run check
 ```
 
-All **15 tests pass locally**. Tests exercise the real local HTTP API, fixture defects and repairs, replay idempotency, ledger isolation, plan-validation boundaries, retention at full plan/run capacity, sanitized provider failures, exact model identities, completed-response requirements, explicit inference selection, bounded output and rejected browser origins. Provider tests inject responses; they make no paid model calls.
+All **21 tests pass locally**. Tests exercise the real local HTTP API, fixture defects and repairs, replay idempotency, ledger isolation, plan-validation boundaries, retention at full plan/run capacity, sanitized provider failures, exact model identities, completed-response requirements, explicit inference selection, bounded output and rejected browser origins. The one-shot capture tests check preflight refusal, actual loopback fixture runs with a distinct five-case injected plan, counter/identity/fixture tampering, redacted exports, early stream cancellation and malformed UTF-8. Provider tests inject responses; they make no paid model calls.
 
 ## How the evidence works
 

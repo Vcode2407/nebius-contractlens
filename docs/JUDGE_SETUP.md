@@ -15,7 +15,7 @@ npm run check
 npm start
 ```
 
-The automated suite passes **15 tests locally**. Provider tests inject bounded responses and make no live inference calls. Open **http://127.0.0.1:4183** in a browser. This address is local to the computer running the server; it is not a hosted application URL.
+The automated suite passes **21 tests locally**. Provider tests inject bounded responses and make no live inference calls. Open **http://127.0.0.1:4183** in a browser. This address is local to the computer running the server; it is not a hosted application URL.
 
 Keep the terminal running. To stop the app, press Ctrl+C in that terminal. If the port is occupied, stop the other local instance or set `PORT` to a free port before starting. Open the matching address; the app remains bound to loopback.
 
@@ -44,5 +44,29 @@ Process memory retains up to 100 reviewed plans and 200 runs. A successful inser
 The optional Nebius adapter is implemented but no live provider response is claimed. To validate it, follow the backend-only configuration in the [README](../README.md), select the actual NVIDIA mode explicitly, and retain the exact requested/returned model identities and actual generated plan. An accepted plan requires an exact model-ID match, `finish_reason: stop`, valid JSON and contract validation. Filtered, tool-call, truncated, unknown and missing completion states never increment verified calls. Do not reuse curated counts as model evidence.
 
 Generation allows one request at a time, a 15-second deadline, 1,600 output tokens and a streamed 64,000-byte response limit. The default allowance is ten dispatched attempts per server process, including failures; `NEBIUS_MAX_CALLS` accepts 1–50. Configuration and concurrency refusals do not dispatch, and curated runs remain available after budget exhaustion. Restarting resets the allowance; it is not a guaranteed billing cap.
+
+## Capture one actual NVIDIA plan
+
+This procedure requires the account owner to obtain legitimate Token Factory access, configure an available NVIDIA model in backend-only ignored `.env`, and start ContractLens. The command does not provision accounts, accept terms, configure credentials or start/restart a server. To bound the first process to one attempt, set `NEBIUS_MAX_CALLS=1` before the owner starts it.
+
+When ready to use that account's allowance, run:
+
+```powershell
+npm run evidence:nebius -- --confirm-nebius-use
+```
+
+Use `--port=4183` or the actual explicit local port. Omission of the confirmation flag refuses before any HTTP request. The command allows only `http://127.0.0.1:<port>` with no credentials, query, fragment or path, and refuses a changed contract, incomplete configuration or exhausted allowance before model dispatch.
+
+It requests exactly one plan for the fixed fictional stock-reservation contract, with no retry or curated fallback. After a successful accepted plan, it makes two local run requests: buggy, then fixed with the same plan and the buggy run ID. No generated code or external API endpoint is executed. A failed model request ends the capture and can consume the one dispatched attempt; resolve the error before explicitly deciding to run it again.
+
+Successful evidence requires exact configured/requested/returned NVIDIA IDs, `modelIdentityVerified: true`, one added attempt and one added verified plan, valid contract-grounded cases, reproducible fixture assertions/state evidence and a matching same-plan comparison. Counters are checked immediately after generation and again after both fixture runs; concurrent usage invalidates a successful capture rather than being attributed to this command. This checks the **accepted server provenance** through the existing completed-response gate. It does not record or claim an independent raw `finish_reason` inspection; `completionEvidence.rawFinishReasonCaptured` is false.
+
+Local API reads refuse redirects, have a 25-second generation deadline and five-second deadlines for other requests, and cancel responses exceeding 256,000 streamed bytes. The command also rejects malformed UTF-8. These bounds complement the provider's separate request limits and do not guarantee a provider billing ceiling.
+
+The saved file is `artifacts/live-evidence/nebius-live-evidence-<planId>.json`, ignored by Git and created without overwriting an earlier capture. Its whitelist includes the fixed contract, validated accepted/rejected case review and coverage, exact model/source/usage provenance, sanitized before/after counters, both actual fixture runs and comparison. Credentials, account metadata, raw provider diagnostics, unknown response fields and raw rejected request payloads are excluded. Review the file before sharing.
+
+Keep this actual model-plan evidence separate from authored curated evidence. There is no required count of nine accepted cases or eight repairs for a generated plan: report its observed coverage, assertions, failures and repairs. The buggy fixture can serialize non-finite state as JSON `null` for invalid strings; the capture compares the actual JSON transport representation against deterministic reproduction rather than inventing a numeric result.
+
+Only synthetic provider responses in isolated local HTTP servers have exercised this command during development. Those tests write no live capture and establish no sponsor account or runtime qualification. A real capture still does not establish public/free judge access, the final YouTube demonstration, firsthand feedback or entrant/submission eligibility.
 
 The loopback app is runnable source for local evaluation. It does not yet provide the public test-build/hosted URL or free judge access through the judging period required for submission. [Qualification provenance](PROVENANCE.md) and the [submission draft](SUBMISSION.md) track the remaining account, runtime, hosting, video, feedback and submission gates.
