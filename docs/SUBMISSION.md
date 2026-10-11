@@ -56,7 +56,9 @@ The optional AI role is to propose a JSON case plan from the structured contract
 
 **Bounding inference and handling failure honestly.** Generation requires explicit selection. It has a 15-second request deadline, a 1,600-token output limit, a streamed 64,000-byte provider-response limit, refused redirects, one generation at a time, and a default ten-dispatch process budget that includes failed requests. Configuration and concurrency refusals do not dispatch, and curated runs remain available after exhaustion. Restarting resets the allowance; these are request limits rather than a guaranteed billing cap. Provider errors remain errors; they do not relabel curated cases as generated output. Tests cover sanitized failures, excessive output, budget exhaustion, private-key handling, and untrusted browser origins.
 
-The current automated suite passes locally: **15 tests**, including the real local HTTP workflow, fixture execution and retention of reviewed evidence at full process capacity. `npm run check` also passes. All provider responses in the automated suite are stubs; no paid or live inference call was made.
+The current automated suite passes locally: **21 tests**, including the real local HTTP workflow, fixture execution, retention of reviewed evidence at full process capacity and guarded one-shot evidence capture. `npm run check` also passes. All provider responses in the automated suite are stubs; no paid or live inference call was made.
+
+The optional `npm run evidence:nebius -- --confirm-nebius-use` command requires explicit authorization for one model plan, verifies accepted server provenance and one-call counters, runs both embedded fixtures, and saves a whitelisted ignored export. It has only been exercised with injected provider responses; actual sponsor evidence remains pending. [Capture procedure](JUDGE_SETUP.md#capture-one-actual-nvidia-plan).
 
 ## What the implementation taught us
 
