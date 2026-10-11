@@ -15,7 +15,7 @@ npm run check
 npm start
 ```
 
-The automated suite contains 13 tests. Provider tests inject bounded responses and make no live inference calls. Open **http://127.0.0.1:4183** in a browser. This address is local to the computer running the server; it is not a hosted application URL.
+The automated suite contains 14 tests. Provider tests inject bounded responses and make no live inference calls. Open **http://127.0.0.1:4183** in a browser. This address is local to the computer running the server; it is not a hosted application URL.
 
 Keep the terminal running. To stop the app, press Ctrl+C in that terminal. If the port is occupied, stop the other local instance or set `PORT` to a free port before starting. Open the matching address; the app remains bound to loopback.
 
@@ -37,7 +37,7 @@ Expected counts describe this curated plan only. Manual edits or actual model pr
 
 Check that `plan.source.kind` is `curated`, that `buggyRun.summary.passed` is 1, that `repairedRun.summary.passed` is 9, and that eight comparison entries have `resolved: true`. Inspect each result's `checks` and `evidence` to trace the verdict to actual request objects, responses, stock and ledger transitions.
 
-Runs and plans are held in bounded process memory. Restart clears them, and plans expire after one hour. If a plan expires, review a fresh plan and rerun both fixtures. Downloaded bundles remain usable offline.
+Process memory retains up to 100 reviewed plans and 200 runs. A successful insertion beyond either limit evicts its oldest record; rejected requests preserve retained evidence. Restart clears them, and plans expire after one hour. If a plan expires or is evicted, review a fresh plan and rerun both fixtures. Downloaded bundles remain usable offline.
 
 ## Qualification and access limits
 

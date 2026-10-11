@@ -56,7 +56,7 @@ The optional AI role is to propose a JSON case plan from the structured contract
 
 **Bounding inference and handling failure honestly.** Generation requires explicit selection. It has a 15-second request deadline, a 1,600-token output limit, a 64 KB provider-response limit, one generation at a time, and a default ten-attempt process budget that includes failed requests. Provider errors remain errors; they do not relabel curated cases as generated output. Tests cover sanitized failures, excessive output, budget exhaustion, private-key handling, and untrusted browser origins.
 
-The current automated suite passes: **13 tests**, including the real local HTTP workflow and fixture execution. `npm run check` also passes. All provider responses in the automated suite are stubs; no paid or live inference call was made.
+The current automated suite passes: **14 tests**, including the real local HTTP workflow, fixture execution and retention of reviewed evidence at full process capacity. `npm run check` also passes. All provider responses in the automated suite are stubs; no paid or live inference call was made.
 
 ## What the implementation taught us
 

@@ -68,7 +68,7 @@ npm test
 npm run check
 ```
 
-Tests exercise the real local HTTP API, fixture defects and repairs, replay idempotency, ledger isolation, plan-validation boundaries, sanitized provider failures, explicit inference selection, bounded output and rejected browser origins. Provider tests inject responses; they make no paid model calls.
+All 14 tests pass. Tests exercise the real local HTTP API, fixture defects and repairs, replay idempotency, ledger isolation, plan-validation boundaries, retention at full plan/run capacity, sanitized provider failures, explicit inference selection, bounded output and rejected browser origins. Provider tests inject responses; they make no paid model calls.
 
 ## How the evidence works
 
@@ -83,7 +83,7 @@ Structured contract
 
 The buggy fixture deliberately accepts invalid quantities, oversells stock, mishandles retries and truncates floating-point prices. The repaired fixture validates quantities and capacity, caches successful idempotent responses, rejects changed payloads and multiplies integer cents. The model does not write or apply these repairs. Both fixture implementations are part of this repository.
 
-Plans and runs are held in bounded process memory. Restarting clears them; export evidence before restarting. A plan expires after one hour. No production authentication, remote hosting or arbitrary API adapter is included. The local origin/host checks protect the loopback developer application; a publicly hosted version would need access controls and provider spending controls before exposure.
+The process retains up to 100 reviewed plans and 200 runs. Only a successful insertion beyond those limits evicts the oldest retained record; rejected requests do not evict reviewed evidence. Restarting clears them; export evidence before restarting. A plan expires after one hour. No production authentication, remote hosting or arbitrary API adapter is included. The local origin/host checks protect the loopback developer application; a publicly hosted version would need access controls and provider spending controls before exposure.
 
 ## Submission preparation
 

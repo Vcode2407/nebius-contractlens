@@ -146,6 +146,32 @@ test('API executes a reviewed plan and returns comparison with real evidence', {
   assert.equal((await f.request('/api/run', { planId: 'missing', scenario: 'buggy' })).status, 409);
 });
 
+test('full plan and run stores preserve reviewed evidence until a successful insertion exceeds capacity', { timeout: 20000 }, async t => {
+  const f = await apiFixture(t, { fetchImpl: async () => { throw new Error('This local retention check must not call a provider'); } });
+  const plan = { name: 'Retention check', summary: '', cases: [{ id: 'reservation', title: 'A valid reservation', invariant: 'happy_path', requests: [request(1)] }] };
+  const create = () => f.request('/api/validate', { plan });
+  const first = await create();
+  assert.equal(first.status, 200);
+  const planId = first.body.plan.planId;
+  for (let i = 1; i < 100; i++) assert.equal((await create()).status, 200);
+
+  assert.equal((await f.request('/api/validate', { plan: { ...plan, cases: [] } })).status, 400);
+  const before = await f.request('/api/run', { planId, scenario: 'buggy' });
+  assert.equal(before.status, 200, 'An unexpired reviewed plan remains runnable at the 100-plan limit, including after rejected validation');
+  for (let i = 1; i < 200; i++) assert.equal((await f.request('/api/run', { planId, scenario: 'buggy' })).status, 200);
+
+  assert.equal((await f.request('/api/run', { planId, scenario: 'invalid' })).status, 400);
+  assert.equal((await f.request('/api/run', { planId, scenario: 'fixed', compareTo: 'missing' })).status, 400);
+  const after = await f.request('/api/run', { planId, scenario: 'fixed', compareTo: before.body.run.runId });
+  assert.equal(after.status, 200, 'Rejected execution or comparison must not evict the oldest retained run');
+  assert.equal(after.body.comparison.length, 1);
+
+  const replacement = await create();
+  assert.equal(replacement.status, 200);
+  assert.equal((await f.request('/api/run', { planId, scenario: 'buggy' })).status, 409, 'The oldest plan is evicted only after a 101st successful insertion');
+  assert.equal((await f.request('/api/run', { planId: replacement.body.plan.planId, scenario: 'buggy' })).status, 200);
+});
+
 test('API requires explicit Nebius selection, keeps credentials private and reports failures honestly', { timeout: 10000 }, async t => {
   let calls = 0;
   let fail = false;

@@ -67,8 +67,6 @@ export async function startServer({ port = 4183, config = readConfig(), fetchImp
       const body = await readJson(request);
       const now = Date.now();
       for (const [id, plan] of plans) if (now - plan.createdAt > 60 * 60 * 1000) plans.delete(id);
-      while (plans.size >= 100) plans.delete(plans.keys().next().value);
-      while (runs.size >= 200) runs.delete(runs.keys().next().value);
       if (path === '/api/plan' || path === '/api/validate') {
         let reviewed;
         let rawPlan;
@@ -98,19 +96,21 @@ export async function startServer({ port = 4183, config = readConfig(), fetchImp
         }
         const plan = { planId: randomUUID(), contractId: contract.id, ...reviewed, rawPlan, source, createdAt: Date.now() };
         plans.set(plan.planId, plan);
+        while (plans.size > 100) plans.delete(plans.keys().next().value);
         json(response, 200, { plan, provider: providerStatus(config, verifiedCalls, attemptedCalls) }); return;
       }
       const plan = plans.get(body.planId);
       if (!plan) throw new AppError('This plan expired or belongs to an earlier server session. Generate a new plan.', 409);
       const evaluated = runPlan(plan, body.scenario);
       const run = { runId: randomUUID(), planId: plan.planId, source: plan.source, ...evaluated };
-      runs.set(run.runId, run);
       let comparison = null;
       if (body.compareTo) {
         const earlier = runs.get(body.compareTo);
         if (!earlier || earlier.planId !== plan.planId || earlier.scenario !== 'buggy' || run.scenario !== 'fixed') throw new AppError('Compare a fixed run with a buggy run of the same plan.');
         comparison = compareRuns(earlier, run);
       }
+      runs.set(run.runId, run);
+      while (runs.size > 200) runs.delete(runs.keys().next().value);
       json(response, 200, { run, comparison });
     } catch (error) {
       json(response, error instanceof AppError ? error.status : 500, { error: error instanceof AppError ? error.message : 'The local test lab could not finish this request.', code: error instanceof AppError ? error.code : 'SERVER_ERROR', ...(error instanceof AppError && error.modelIdentity ? { modelIdentity: error.modelIdentity } : {}) });
