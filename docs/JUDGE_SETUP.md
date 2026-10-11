@@ -15,7 +15,7 @@ npm run check
 npm start
 ```
 
-The automated suite contains 14 tests. Provider tests inject bounded responses and make no live inference calls. Open **http://127.0.0.1:4183** in a browser. This address is local to the computer running the server; it is not a hosted application URL.
+The automated suite passes **15 tests locally**. Provider tests inject bounded responses and make no live inference calls. Open **http://127.0.0.1:4183** in a browser. This address is local to the computer running the server; it is not a hosted application URL.
 
 Keep the terminal running. To stop the app, press Ctrl+C in that terminal. If the port is occupied, stop the other local instance or set `PORT` to a free port before starting. Open the matching address; the app remains bound to loopback.
 
@@ -41,6 +41,8 @@ Process memory retains up to 100 reviewed plans and 200 runs. A successful inser
 
 ## Qualification and access limits
 
-The optional Nebius adapter is implemented but no live provider response is claimed. To validate it, follow the backend-only configuration in the [README](../README.md), select the actual NVIDIA mode explicitly, and retain the exact requested/returned model identities and actual generated plan. Do not reuse curated counts as model evidence.
+The optional Nebius adapter is implemented but no live provider response is claimed. To validate it, follow the backend-only configuration in the [README](../README.md), select the actual NVIDIA mode explicitly, and retain the exact requested/returned model identities and actual generated plan. An accepted plan requires an exact model-ID match, `finish_reason: stop`, valid JSON and contract validation. Filtered, tool-call, truncated, unknown and missing completion states never increment verified calls. Do not reuse curated counts as model evidence.
+
+Generation allows one request at a time, a 15-second deadline, 1,600 output tokens and a streamed 64,000-byte response limit. The default allowance is ten dispatched attempts per server process, including failures; `NEBIUS_MAX_CALLS` accepts 1–50. Configuration and concurrency refusals do not dispatch, and curated runs remain available after budget exhaustion. Restarting resets the allowance; it is not a guaranteed billing cap.
 
 The loopback app is runnable source for local evaluation. It does not yet provide the public test-build/hosted URL or free judge access through the judging period required for submission. [Qualification provenance](PROVENANCE.md) and the [submission draft](SUBMISSION.md) track the remaining account, runtime, hosting, video, feedback and submission gates.

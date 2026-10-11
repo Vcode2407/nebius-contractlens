@@ -52,6 +52,7 @@ export async function generateNebiusPlan(contract, config, fetchImpl = fetch) {
   try {
     response = await fetchImpl(TOKEN_FACTORY_ENDPOINT, {
       method: 'POST',
+      redirect: 'error',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${config.apiKey}` },
       signal: AbortSignal.timeout(15000),
       body: JSON.stringify({
@@ -81,7 +82,9 @@ export async function generateNebiusPlan(contract, config, fetchImpl = fetch) {
       throw error;
     }
     const choice = data.choices?.[0];
-    if (choice?.finish_reason === 'length') throw new AppError('The model reached its response limit before finishing JSON. Retry; no partial plan was executed.', 502, 'INCOMPLETE_MODEL_PLAN');
+    if (choice?.finish_reason !== 'stop') throw new AppError(choice?.finish_reason === 'length'
+      ? 'The model reached its response limit before finishing JSON. Retry; no partial plan was executed.'
+      : 'The model did not report a completed plan. Filtered, tool-call and unfinished responses were refused; no tests were executed.', 502, 'INCOMPLETE_MODEL_PLAN');
     const content = choice?.message?.content;
     if (typeof content !== 'string' || content.length > 18000) throw new AppError('The model returned an invalid or oversized plan. No tests were executed.', 502, 'INVALID_MODEL_PLAN');
     let rawPlan;

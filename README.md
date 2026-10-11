@@ -53,11 +53,11 @@ NEBIUS_MAX_CALLS=10
 PORT=4183
 ```
 
-Restart, select **NVIDIA model via Nebius**, and click **Review case plan**. This performs one inference request with a 15-second deadline, no application retry, a 1,600-token output limit, a 64 KB provider-response limit and bounded plan validation. Only one generation can run at a time. The default process budget is ten attempts, including provider failures; `NEBIUS_MAX_CALLS` may be set from 1 to 50. Curated runs do not consume that budget. The key is backend-only and never sent to the browser, stored in evidence or committed by this repository.
+Restart, select **NVIDIA model via Nebius**, and click **Review case plan**. This performs one inference request with a 15-second deadline, no application retry, refused redirects, a 1,600-token output limit, a streamed 64,000-byte provider-response limit and bounded plan validation. Only one generation can run at a time. The default process budget is ten dispatched attempts, including provider failures; `NEBIUS_MAX_CALLS` may be set from 1 to 50. Configuration failures and concurrent-request refusals do not dispatch another request, and curated runs do not consume that budget. Restarting resets the allowance; these request limits are not a guaranteed billing or spending cap. The key is backend-only and never sent to the browser, stored in evidence or committed by this repository.
 
 The model proposes a JSON plan through a prompt. We do **not** assume that the selected model supports a particular strict JSON-schema mode. The application parses and validates every proposal, accepts only one or two bounded requests per case, and derives all expected outcomes from the contract. Unsupported endpoints, code-shaped inputs, model-supplied pass criteria and cases that do not exercise their named invariant are rejected. Inference failure returns an explicit error; it never silently relabels curated cases as AI output.
 
-The provider response must identify the **exact requested model ID** before a plan is accepted or the verified-call counter increases. Requested and returned IDs are preserved in evidence. Missing metadata, another vendor, or an unverified NVIDIA variant is rejected; no undocumented alias mapping is assumed. If the provider returns a canonical variant, verify that model against official provider documentation and configure its exact ID before retrying.
+The provider response must identify the **exact requested model ID** and report `finish_reason` exactly `stop` before a validated plan is accepted or the verified-call counter increases. Requested and returned IDs are preserved in evidence. Filtered, tool-call, truncated, unknown and missing completion states are rejected even when they contain valid plan JSON. Missing model metadata, another vendor, or an unverified NVIDIA variant is also rejected; no undocumented alias mapping is assumed. If the provider returns a canonical variant, verify that model against official provider documentation and configure its exact ID before retrying.
 
 [Current Token Factory billing documentation](https://docs.tokenfactory.nebius.com/other-capabilities/billing-new) requires billing onboarding and a bank card. The [hackathon resources](https://nebiusglobalaihackathon.devpost.com/resources) describe promotional credits, but actual account provisioning, credits, country support and model access must be verified by the participant. This project has made no live provider calls during implementation or automated testing.
 
@@ -68,7 +68,7 @@ npm test
 npm run check
 ```
 
-All 14 tests pass. Tests exercise the real local HTTP API, fixture defects and repairs, replay idempotency, ledger isolation, plan-validation boundaries, retention at full plan/run capacity, sanitized provider failures, explicit inference selection, bounded output and rejected browser origins. Provider tests inject responses; they make no paid model calls.
+All **15 tests pass locally**. Tests exercise the real local HTTP API, fixture defects and repairs, replay idempotency, ledger isolation, plan-validation boundaries, retention at full plan/run capacity, sanitized provider failures, exact model identities, completed-response requirements, explicit inference selection, bounded output and rejected browser origins. Provider tests inject responses; they make no paid model calls.
 
 ## How the evidence works
 

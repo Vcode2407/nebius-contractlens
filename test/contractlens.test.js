@@ -6,7 +6,7 @@ import { EXAMPLE_NVIDIA_MODEL, TOKEN_FACTORY_ENDPOINT, generateNebiusPlan, provi
 import { startServer } from '../src/server.js';
 
 const configured = { provider: 'nebius', modelId: EXAMPLE_NVIDIA_MODEL, apiKey: 'injected-test-key' };
-const modelResponse = (plan, { model = EXAMPLE_NVIDIA_MODEL, omitModel = false } = {}) => new Response(JSON.stringify({ ...(omitModel ? {} : { model }), choices: [{ finish_reason: 'stop', message: { content: JSON.stringify(plan) } }], usage: { prompt_tokens: 400, completion_tokens: 800, total_tokens: 1200 } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+const modelResponse = (plan, { model = EXAMPLE_NVIDIA_MODEL, omitModel = false, finishReason = 'stop' } = {}) => new Response(JSON.stringify({ ...(omitModel ? {} : { model }), choices: [{ finish_reason: finishReason, message: { content: JSON.stringify(plan) } }], usage: { prompt_tokens: 400, completion_tokens: 800, total_tokens: 1200 } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
 
 test('curated checks expose eight real fixture failures and all pass after repair', () => {
   const plan = validatePlan(curatedPlan());
@@ -65,6 +65,7 @@ test('real adapter uses the official endpoint and bounded NVIDIA request while v
   const result = await generateNebiusPlan(contract, configured, async (url, options) => {
     calls++;
     assert.equal(url, TOKEN_FACTORY_ENDPOINT);
+    assert.equal(options.redirect, 'error');
     assert.equal(options.headers.Authorization, 'Bearer injected-test-key');
     assert.ok(options.signal instanceof AbortSignal);
     const body = JSON.parse(options.body);
@@ -222,6 +223,31 @@ test('missing or mismatched model metadata never increments verified inference c
   assert.equal(accepted.status, 200);
   assert.equal(accepted.body.provider.verifiedCalls, 1);
   assert.equal(accepted.body.plan.source.modelIdentityVerified, true);
+});
+
+test('filtered, tool-call and unfinished completions never become verified plans even with valid JSON', { timeout: 10000 }, async t => {
+  let finishReason;
+  const f = await apiFixture(t, { config: configured, fetchImpl: async () => modelResponse(curatedPlan(), { finishReason }) });
+  for (const reason of ['length', 'content_filter', 'tool_calls', null, 'unexpected']) {
+    finishReason = reason;
+    const refused = await f.request('/api/plan', { contractId: contract.id, mode: 'nebius' });
+    assert.equal(refused.status, 502);
+    assert.equal(refused.body.code, 'INCOMPLETE_MODEL_PLAN');
+    assert.equal(refused.body.plan, undefined);
+  }
+  const missing = await generateNebiusPlan(contract, configured, async () => {
+    const response = await modelResponse(curatedPlan()).json();
+    delete response.choices[0].finish_reason;
+    return new Response(JSON.stringify(response));
+  }).then(() => false, error => error.code === 'INCOMPLETE_MODEL_PLAN');
+  assert.equal(missing, true);
+  const status = await f.request('/api/bootstrap');
+  assert.equal(status.body.provider.verifiedCalls, 0);
+  assert.equal(status.body.provider.attemptedCalls, 5);
+  finishReason = 'stop';
+  const accepted = await f.request('/api/plan', { contractId: contract.id, mode: 'nebius' });
+  assert.equal(accepted.status, 200);
+  assert.equal(accepted.body.provider.verifiedCalls, 1);
 });
 
 test('server inference budget counts failed attempts and preserves curated access', { timeout: 10000 }, async t => {

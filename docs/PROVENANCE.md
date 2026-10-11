@@ -16,6 +16,8 @@ Official sources checked October 10, 2026:
 
 The curated case plan is authored in `src/contracts.js`. The two API fixtures and deterministic assertions are authored in `src/harness.js`. The optional provider request is implemented in `src/nebius.js`; it has no generic target URL setting. The browser keeps case source, model identity and actual execution evidence visible. No external API is mutated, and no generated script, subprocess, arbitrary code or filesystem instruction is executed.
 
+Provider acceptance requires the exact configured NVIDIA model ID, a `stop` completion and a validated plan. Filtered, tool-call, truncated, unknown or absent completion states do not establish verified inference. Calls have a 15-second deadline, 1,600 output tokens and a streamed 64,000-byte response limit, with no retry or redirects. One generation runs at a time, and ten dispatched attempts per process are permitted by default (`NEBIUS_MAX_CALLS`: 1–50), including failures. Configuration/concurrency refusals do not dispatch. Restarting resets that allowance, so it is not a guaranteed billing cap.
+
 All automated provider tests use injected responses and a dummy key. A green test suite confirms the adapter contract and local behavior, not a live account or real model response. No sponsor account, credit, billing method or model availability was verified during implementation. The application records successful validated inference calls only within the running server process.
 
 ## Gates before claiming a qualifying submission
@@ -24,7 +26,7 @@ All automated provider tests use injected responses and a dummy key. A green tes
 - [ ] Provision Token Factory with valid account access, billing and an NVIDIA model available to that account.
 - [ ] Request and validate a real NVIDIA model plan through Nebius; preserve model/source/usage provenance and resulting test evidence.
 - [ ] Evaluate model-generated cases on both fixtures; report coverage and actual results without copying curated-run counts onto the model run.
-- [ ] Publish this repository with MIT license visible and complete setup/run instructions.
+- [x] [Public MIT repository](https://github.com/Vcode2407/nebius-contractlens) with setup/run instructions.
 - [ ] Provide a functioning demo, test build or hosted application with free judge access through the judging period ending December 15, 2026.
 - [ ] Upload a public YouTube video under three minutes demonstrating the actual model and working evidence loop.
 - [ ] Complete the project description, track choice and feedback about the tools actually used.
