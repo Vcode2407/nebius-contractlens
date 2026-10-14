@@ -12,6 +12,8 @@ Official sources checked October 10, 2026:
 - [Structured-output documentation](https://docs.tokenfactory.nebius.com/ai-models-inference/json): support varies by model. ContractLens uses prompt-directed JSON plus application validation instead of assuming strict-schema support.
 - [Billing documentation](https://docs.tokenfactory.nebius.com/other-capabilities/billing-new): mandatory billing onboarding with a bank card; credits do not establish an onboarding exemption.
 
+The [Official Rules](https://nebiusglobalaihackathon.devpost.com/rules) judge-access options were rechecked October 14, 2026. Submission Requirements accept a working demo, hosted application **or test-build URL**; Testing requires free project access through December 15, 2026, 12:00pm PST (December 16, 1:30am IST). Cloud hosting is an alternative to a working downloadable build. A reviewed public release ZIP with setup/launch instructions is planned after actual NVIDIA inference is verified; its publication and clean-extraction/judge-access verification remain pending. Live generation still needs a legitimate private backend credential/model/allowance arrangement. Publishing source or showing curated cases alone does not satisfy the runtime requirement.
+
 ## What has actually been implemented
 
 The curated case plan is authored in `src/contracts.js`. The two API fixtures and deterministic assertions are authored in `src/harness.js`. The optional provider request is implemented in `src/nebius.js`; it has no generic target URL setting. The browser keeps case source, model identity and actual execution evidence visible. No external API is mutated, and no generated script, subprocess, arbitrary code or filesystem instruction is executed.
@@ -27,7 +29,7 @@ All automated provider tests use injected responses and a dummy key. A green tes
 - [ ] Request and validate a real NVIDIA model plan through Nebius; preserve model/source/usage provenance and resulting test evidence.
 - [ ] Evaluate model-generated cases on both fixtures; report coverage and actual results without copying curated-run counts onto the model run.
 - [x] [Public MIT repository](https://github.com/Vcode2407/nebius-contractlens) with setup/run instructions.
-- [ ] Provide a functioning demo, test build or hosted application with free judge access through the judging period ending December 15, 2026.
+- [ ] Provide a verified working-demo, hosted-application or test-build URL with free judge access through December 15, 2026, 12:00pm PST (December 16, 1:30am IST). The planned reviewed release ZIP remains pending; cloud hosting is an alternative.
 - [ ] Upload a public YouTube video under three minutes demonstrating the actual model and working evidence loop.
 - [ ] Complete the project description, track choice and feedback about the tools actually used.
 - [ ] Submit before October 30, 2026, 10:30pm IST; leave time for upload and form problems.

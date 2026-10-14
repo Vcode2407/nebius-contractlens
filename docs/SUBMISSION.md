@@ -76,7 +76,7 @@ A useful generated test must express a meaningful contract invariant and produce
 
 Validate participant access to Nebius and an available NVIDIA open-source model, then request a real plan through Token Factory. Preserve the exact requested/returned model IDs and usage provenance, review accepted/rejected cases and coverage, and run that actual generated plan against both fixtures. Report its observed counts separately from the curated baseline.
 
-The MIT repository is public. Complete a working public judge-access path, record the verified model-to-evidence flow, and write provider feedback based on actual use. Future product work could support additional structured contracts, durable evidence bundles, and carefully scoped adapters for other test environments.
+The MIT repository is public. Complete a working-demo, hosted-application or test-build URL with verified free judge access, record the verified model-to-evidence flow, and write provider feedback based on actual use. After actual NVIDIA inference is verified, the planned desktop release is a reviewed public ZIP with setup/launch instructions and clean-extraction checks. Its publication and judge-access arrangement remain pending. Live generation needs legitimate private backend credentials, model access and allowance; source publication or curated-only operation does not establish sponsor runtime qualification or free testing of that live flow. Future product work could support additional structured contracts, durable evidence bundles, and carefully scoped adapters for other test environments.
 
 ## Demo outline — 2 minutes 50 seconds
 
@@ -103,7 +103,7 @@ If the generated plan omits a curated case or exposes different failures, follow
 | Track | Coding and Agentic Engineering — intended selection, not submitted. |
 | Built with | Node.js, JavaScript, HTML, CSS. Nebius Token Factory/NVIDIA runtime use remains pending verification. |
 | Public repository | https://github.com/Vcode2407/nebius-contractlens — public, MIT licensed; Windows/Ubuntu regression CI configured. |
-| Working demo / test build | [Clean-checkout local judge instructions](JUDGE_SETUP.md) prepared. Required public access URL remains pending; the current loopback address is `http://127.0.0.1:4183`. |
+| Working demo / test build | [Local judge instructions and access plan](JUDGE_SETUP.md#judge-access-options) prepared. A reviewed public release ZIP with setup/launch instructions is planned after actual NVIDIA inference is verified; release URL and free judge-access verification remain pending. A working hosted/demo URL is an alternative. The local loopback address is `http://127.0.0.1:4183`. |
 | Public YouTube video | **Pending URL.** Target: 2:50 with the verified model and actual application modules. |
 | Actual local development video | [Silent 2:25 MP4 and matching execution/export evidence](LOCAL_DEMO.md) available. Curated cases; no model call. |
 | Screenshots | [Actual curated retry before/after and repaired summary](LOCAL_DEMO.md) captured. Model-provenance screenshots remain pending actual inference. |
@@ -116,6 +116,6 @@ If the generated plan omits a curated case or exposes different failures, follow
 
 From the repository root, run `npm ci`, then `npm start`, and open `http://127.0.0.1:4183`. Run `npm test` and `npm run check` for validation. The [README](../README.md) provides optional provider configuration, and [PROVENANCE.md](PROVENANCE.md) records the official sources and remaining access gates.
 
-The event requires runtime use of Nebius Token Factory or Nebius AI Cloud with at least one NVIDIA open-source model. It also requires public licensed source, a working demo/hosted application/test-build URL, English materials, a public YouTube video under three minutes, track selection, and tool feedback. Deadline: **October 30, 2026, 10:00am PDT / 10:30pm IST**. Maintain free judge access through the judging period ending **December 15, 2026**. [Official rules](https://nebiusglobalaihackathon.devpost.com/rules)
+The event requires runtime use of Nebius Token Factory or Nebius AI Cloud with at least one NVIDIA open-source model. It also requires public licensed source, a working demo, hosted application **or test-build URL**, English materials, a public YouTube video under three minutes, track selection, and tool feedback. Cloud hosting is one permitted access route; a verified downloadable build is another. Deadline: **October 30, 2026, 10:00am PDT / 10:30pm IST**. Maintain free judge access through **December 15, 2026, 12:00pm PST / December 16, 1:30am IST**, with the build functioning as depicted in the final video. [Official rules](https://nebiusglobalaihackathon.devpost.com/rules), access options rechecked October 14.
 
-The curated local demonstration establishes the implemented evidence loop. Qualifying runtime inference, public access and assets, eligibility, and final submission still need completion.
+The curated local demonstration establishes the implemented evidence loop. Qualifying runtime inference, a verified free judge-access URL/build and public submission assets, eligibility, and final submission still need completion.

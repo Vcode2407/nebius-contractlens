@@ -1,6 +1,6 @@
 # Clean-checkout local judge walkthrough
 
-This guide reproduces the implemented curated fixture workflow without a sponsor account or inference request. It establishes local behavior only. The event's required real NVIDIA inference through Nebius and a working public judge-access URL remain pending.
+This guide reproduces the implemented curated fixture workflow without a sponsor account or inference request. It establishes local behavior only. The event's required real NVIDIA inference through Nebius and a working demo, hosted application or test-build URL with free judge access remain pending.
 
 ## Install and start
 
@@ -67,6 +67,14 @@ The saved file is `artifacts/live-evidence/nebius-live-evidence-<planId>.json`, 
 
 Keep this actual model-plan evidence separate from authored curated evidence. There is no required count of nine accepted cases or eight repairs for a generated plan: report its observed coverage, assertions, failures and repairs. The buggy fixture can serialize non-finite state as JSON `null` for invalid strings; the capture compares the actual JSON transport representation against deterministic reproduction rather than inventing a numeric result.
 
-Only synthetic provider responses in isolated local HTTP servers have exercised this command during development. Those tests write no live capture and establish no sponsor account or runtime qualification. A real capture still does not establish public/free judge access, the final YouTube demonstration, firsthand feedback or entrant/submission eligibility.
+Only synthetic provider responses in isolated local HTTP servers have exercised this command during development. Those tests write no live capture and establish no sponsor account or runtime qualification. A real capture still does not establish free judge access to the chosen build, the final YouTube demonstration, firsthand feedback or entrant/submission eligibility.
 
-The loopback app is runnable source for local evaluation. It does not yet provide the public test-build/hosted URL or free judge access through the judging period required for submission. [Qualification provenance](PROVENANCE.md) and the [submission draft](SUBMISSION.md) track the remaining account, runtime, hosting, video, feedback and submission gates.
+## Judge-access options
+
+The [Official Rules](https://nebiusglobalaihackathon.devpost.com/rules), rechecked October 14, 2026, accept a URL to a **working demo, hosted application or test build**. A reviewed downloadable desktop build is an available route for this project; cloud hosting is an alternative. The project must work as depicted in its video and description and remain free of charge for judge testing through **December 15, 2026, 12:00pm PST / December 16, 1:30am IST**.
+
+After actual NVIDIA inference is verified, the planned release is a public ZIP containing the reviewed application, MIT license, assets and setup/launch instructions. Verify a clean extraction on the intended platform, both embedded-fixture runs, exports, and the documented live-generation configuration before supplying its release URL to Devpost. Record the exact release revision and explain which evidence is authored curated data and which came from an actual accepted model plan. This release has not yet been packaged or published.
+
+The local fixture workflow needs only Node.js 22 or newer. Live generation additionally needs legitimate Nebius credentials, an available NVIDIA model and allowance, configured privately on the backend. Credentials must stay out of the release ZIP and public instructions. Complete and verify a free, usable judge-access arrangement for the live flow; a requirement that judges provision or pay for their own sponsor account does not establish that arrangement. The existing curated walkthrough and public source alone do not establish sponsor runtime qualification.
+
+The loopback URL points to the judge's own computer after installation; it is not the external submission link. Supply the verified release/test-build URL, or a working hosted/demo URL if that route is chosen. [Qualification provenance](PROVENANCE.md) and the [submission draft](SUBMISSION.md) track the remaining account, runtime, judge-access, video, feedback and submission gates.

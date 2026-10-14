@@ -8,7 +8,7 @@ Public MIT source: [Vcode2407/nebius-contractlens](https://github.com/Vcode2407/
 
 This is a working local prototype for the **Nebius x NVIDIA Global AI Hackathon**, intended for the Coding and Agentic Engineering track. It currently audits one embedded Stock Reservation API. It does not scan arbitrary services or execute generated code.
 
-**Qualification is pending.** The default demonstration uses clearly labelled curated cases and performs real deterministic fixture execution. The MIT repository is public. A real NVIDIA model response through Nebius, free public judge access, public YouTube demo video, firsthand provider feedback, entrant eligibility and submitted entry still need completion. Configuring an API key alone does not verify inference.
+**Qualification is pending.** The default demonstration uses clearly labelled curated cases and performs real deterministic fixture execution. The MIT repository is public. A real NVIDIA model response through Nebius, a working demo or test-build URL with free judge access, public YouTube demo video, firsthand provider feedback, entrant eligibility and submitted entry still need completion. Configuring an API key alone does not verify inference.
 
 ## Run locally
 
@@ -73,7 +73,7 @@ The command accepts only `http://127.0.0.1:<port>` (`--port=4183` by default), c
 
 On success it runs the same accepted plan against the buggy and fixed **embedded fixtures**, checks the request/state evidence and comparison against deterministic local reproduction, and requires the attempt/verified counters to increase by exactly one. It preserves exact requested/returned NVIDIA identities and accepted server provenance. The server's existing acceptance gate requires `finish_reason: stop`; the command does **not** capture or claim to independently inspect the raw completion envelope.
 
-The whitelisted result is saved as ignored `artifacts/live-evidence/nebius-live-evidence-<planId>.json`, without credentials, unknown provider fields or raw rejected request payloads. Earlier captures are preserved. Model-plan counts and invariant coverage are reported from that captured plan; they are never replaced with curated baseline counts. A capture establishes this controlled runtime/evidence loop, not production API reliability, public judge access or a completed submission. Review the file before sharing. [Detailed judge procedure](docs/JUDGE_SETUP.md#capture-one-actual-nvidia-plan).
+The whitelisted result is saved as ignored `artifacts/live-evidence/nebius-live-evidence-<planId>.json`, without credentials, unknown provider fields or raw rejected request payloads. Earlier captures are preserved. Model-plan counts and invariant coverage are reported from that captured plan; they are never replaced with curated baseline counts. A capture establishes this controlled runtime/evidence loop, not production API reliability, free judge access or a completed submission. Review the file before sharing. [Detailed judge procedure](docs/JUDGE_SETUP.md#capture-one-actual-nvidia-plan).
 
 This command has been verified with isolated loopback servers and injected provider responses only. No account, live model request or sponsor billing operation was performed during development.
 
@@ -104,5 +104,7 @@ The process retains up to 100 reviewed plans and 200 runs. Only a successful ins
 ## Submission preparation
 
 See [the source and qualification notes](docs/PROVENANCE.md) and [the demo script](docs/DEMO.md). The verified deadline is **October 30, 2026, 10:00am PDT / 10:30pm IST**. Sponsor rules require actual runtime use of Nebius and an NVIDIA open-source model; the curated demonstration alone does not establish that requirement.
+
+The [Official Rules](https://nebiusglobalaihackathon.devpost.com/rules), rechecked October 14, allow a **working demo, hosted application or test-build URL**. Cloud hosting is one option. The planned desktop path is a reviewed public release ZIP with setup/launch instructions, prepared after actual NVIDIA inference is verified and tested from a clean extraction. That release and its judge-access check are still pending. Maintain free access through **December 15, 2026, 12:00pm PST / December 16, 1:30am IST**, and verify that the build works as depicted in the final video. Live generation still needs legitimate backend-only Nebius credentials, model access and available allowance; a public source ZIP or curated-only walkthrough does not establish runtime qualification or unrestricted judge testing of the live flow. [Judge-access plan](docs/JUDGE_SETUP.md#judge-access-options).
 
 License: MIT. The repository contains original application code and no NVIDIA model weights. Model usage remains subject to the relevant provider and model terms.
